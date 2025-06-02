@@ -1,0 +1,93 @@
+<div class="container my-5">
+  <h2 class="text-center mb-4">Our Products</h2>
+
+  <!-- Total Products Display -->
+  <div class="alert alert-info text-center">
+    <strong>Total Products: {{ products.length }}</strong>
+  </div>
+
+  <!-- Filter Form -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5>Filter Products</h5>
+    </div>
+    <div class="card-body">
+      <form class="row g-3">
+        <div class="col-md-4">
+          <label for="categoryFilter" class="form-label">Category</label>
+          <select class="form-select" id="categoryFilter"
+                  [(ngModel)]="filterValues.category"
+                  name="category"
+                  (change)="updateFilterDisplay()">
+            <option value="">All</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="titleFilter" class="form-label">Product Title</label>
+          <input type="text" class="form-control" id="titleFilter"
+                 placeholder="Search by title..."
+                 [(ngModel)]="filterValues.title"
+                 name="title"
+                 (input)="updateFilterDisplay()">
+        </div>
+        <div class="col-md-4">
+          <label for="priceFilter" class="form-label">Max Price ($)</label>
+          <input type="number" class="form-control" id="priceFilter"
+                 placeholder="Enter max price"
+                 [(ngModel)]="filterValues.maxPrice"
+                 name="maxPrice"
+                 (input)="updateFilterDisplay()">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary w-100">Apply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Current Filter Values Display -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h6>Current Filter Values</h6>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <strong>Category:</strong> {{ displayValues.category || 'All' }}
+        </div>
+        <div class="col-md-4">
+          <strong>Title Search:</strong> {{ displayValues.title || 'None' }}
+        </div>
+        <div class="col-md-4">
+          <strong>Max Price:</strong> {{ displayValues.maxPrice || 'None' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product List -->
+  <div class="row">
+    <h4 class="mb-3">Product List</h4>
+    <div class="col-lg-3 col-md-6 mb-4" *ngFor="let product of products">
+      <div class="card h-100">
+        <!-- Product Image Section -->
+        <div class="card-img-top-container">
+          <img [src]="product.image || 'https://via.placeholder.com/250x200?text=No+Image'"
+               [alt]="product.title"
+               class="card-img-top product-image">
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ product.title }}</h5>
+          <p class="card-text">
+            <span class="badge bg-secondary mb-2">{{ product.category }}</span><br>
+            <strong>Price: </strong> ${{ product.price }}<br>
+            <strong>Stock: </strong>
+            <span [class]="getStockClass(product.stock)">{{ product.stock }} units</span>
+          </p>
+          <button class="btn btn-primary mt-auto">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
