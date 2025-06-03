@@ -1,7 +1,8 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Product, ProductsResponse } from '../models/product.model';
 
 @Injectable({
@@ -13,9 +14,27 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]>{
-    return this.http.get<ProductsResponse>(`${this.baseUrl}/products`)
+    return this.http.get<any>(`${this.baseUrl}/products`)
       .pipe(
-        map(response => response.products)
+        tap(response => {
+          console.log('Raw API Response:', response);
+          if (response.products && response.products.length > 0) {
+            console.log('First product structure:', response.products[0]);
+          }
+        }),
+        map(response => response.products.map((product: any) => ({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          category: product.category,
+          thumbnail: product.thumbnail,
+          images: product.images || [],
+          rating: product.rating,
+          stock: product.stock,
+          brand: product.brand,
+          discountPercentage: product.discountPercentage
+        })))
       );
   }
 

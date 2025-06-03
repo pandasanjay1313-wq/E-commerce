@@ -44,6 +44,9 @@ export class ProductsComponent implements OnInit {
         this.products = products;
         this.allProducts = products;
         console.log('Products loaded: ' + products.length);
+        console.log('First product:', products[0]);
+        console.log('First product thumbnail:', products[0]?.thumbnail);
+        console.log('First product images:', products[0]?.images);
       },
       error: (error) => {
         console.error("Error loading products: ", error);
@@ -124,10 +127,32 @@ export class ProductsComponent implements OnInit {
   }
 
   // Get stock class for styling
-  getStockBadgeClass(stock: number | undefined): string {
-    if (!stock) return 'bg-secondary';
+  getStockBadgeClass(stock: number): string {
+    if (stock === 0) return 'bg-secondary';
     if (stock < 20) return 'bg-danger';
     if (stock < 40) return 'bg-warning';
     return 'bg-success';
+  }
+
+  // Debug method to log image URL
+  onImageError(event: any, product: Product): void {
+    console.log('Image failed to load for product:', product.title);
+    console.log('Thumbnail URL:', product.thumbnail);
+    console.log('Images array:', product.images);
+    event.target.src = 'https://via.placeholder.com/200x200?text=No+Image';
+  }
+
+  // Get image URL with fallbacks
+  getImageUrl(product: Product): string {
+    if (product.thumbnail) {
+      console.log('Using thumbnail:', product.thumbnail);
+      return product.thumbnail;
+    }
+    if (product.images && product.images.length > 0) {
+      console.log('Using first image:', product.images[0]);
+      return product.images[0];
+    }
+    console.log('No image available for product:', product.title);
+    return 'https://via.placeholder.com/200x200?text=No+Image';
   }
 }

@@ -258,25 +258,37 @@
         <!-- Product Image -->
         <div class="position-relative">
           <img
-            [src]="product.image"
+            [src]="getImageUrl(product)"
             [alt]="product.title"
             class="card-img-top product-image"
-            style="height: 200px; object-fit: contain; padding: 10px;">
+            style="height: 200px; object-fit: contain; padding: 10px; background-color: #f8f9fa;"
+            (error)="onImageError($event, product)"
+            loading="lazy">
 
           <!-- Stock Badge -->
-          <span *ngIf="product.stock !== undefined"
-                class="position-absolute top-0 end-0 m-2 badge text-white"
+          <span class="position-absolute top-0 end-0 m-2 badge text-white"
                 [ngClass]="getStockBadgeClass(product.stock)">
             {{ product.stock }} in stock
+          </span>
+
+          <!-- Discount Badge -->
+          <span *ngIf="product.discountPercentage && product.discountPercentage > 0"
+                class="position-absolute top-0 start-0 m-2 badge bg-danger">
+            -{{ product.discountPercentage.toFixed(0) }}%
           </span>
         </div>
 
         <!-- Product Details -->
         <div class="card-body d-flex flex-column">
-          <!-- Category -->
-          <span class="badge bg-light text-dark mb-2 align-self-start">
-            {{ product.category | titlecase }}
-          </span>
+          <!-- Category and Brand -->
+          <div class="d-flex justify-content-between mb-2">
+            <span class="badge bg-light text-dark">
+              {{ product.category | titlecase }}
+            </span>
+            <small *ngIf="product.brand" class="text-muted">
+              {{ product.brand }}
+            </small>
+          </div>
 
           <!-- Title -->
           <h6 class="card-title" [title]="product.title">
@@ -294,10 +306,10 @@
               <div class="text-warning me-2">
                 <i *ngFor="let star of [1,2,3,4,5]"
                    class="fas fa-star"
-                   [ngClass]="star <= product.rating.rate ? 'text-warning' : 'text-muted'"></i>
+                   [ngClass]="star <= product.rating ? 'text-warning' : 'text-muted'"></i>
               </div>
               <small class="text-muted">
-                {{ product.rating.rate }}/5 ({{ product.rating.count }} reviews)
+                {{ product.rating.toFixed(1) }}/5
               </small>
             </div>
           </div>
@@ -305,7 +317,13 @@
           <!-- Price and Add to Cart -->
           <div class="mt-auto">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="text-primary mb-0">${{ product.price.toFixed(2) }}</h5>
+              <div>
+                <h5 class="text-primary mb-0">${{ product.price.toFixed(2) }}</h5>
+                <small *ngIf="product.discountPercentage && product.discountPercentage > 0"
+                       class="text-muted text-decoration-line-through">
+                  ${{ (product.price / (1 - product.discountPercentage / 100)).toFixed(2) }}
+                </small>
+              </div>
               <button
                 type="button"
                 class="btn btn-primary btn-sm"
