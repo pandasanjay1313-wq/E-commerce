@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Product} from '../../models/product.model';
 import {ProductService} from '../../services/product.service';
+import {ProductFilterCriteria} from '../../pipes/product-filter-pipe';
 
 @Component({
   selector: 'app-products',
@@ -9,24 +10,22 @@ import {ProductService} from '../../services/product.service';
   standalone: false
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] = [];
-  allProducts: Product[] = []; // Store original list for filtering
+  allProducts: Product[] = [];
   categories: string[] = [];
   isLoading = false;
 
-  filterValues = {
+  // Filter criteria object for the pipe
+  filterCriteria: ProductFilterCriteria = {
     category: '',
     title: '',
-    minPrice: null as number | null,
-    maxPrice: null as number | null
+    minPrice: null,
+    maxPrice: null
   };
 
-  displayValues = {
-    category: '',
-    title: '',
-    minPrice: null as number | null,
-    maxPrice: null as number | null
-  };
+
+  // Display values for showing active filters
+  displayValues: ProductFilterCriteria = {};
+
 
   constructor(private productService: ProductService) {
   }
@@ -35,13 +34,15 @@ export class ProductsComponent implements OnInit {
     this.loadData();
   }
 
+  // Expose Math to template
+  Math = Math;
+
   loadData(): void {
     this.isLoading = true;
 
     // Load products
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.products = products;
         this.allProducts = products;
         console.log('Products loaded: ' + products.length);
         console.log('First product:', products[0]);
@@ -69,56 +70,66 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  // Auto-apply filters for immediate feedback
-  updateFilterDisplay(): void {
-    this.displayValues = {...this.filterValues};
-    this.applyFilters();
+  // Update filter criteria when user interacts with filters
+  updateFilters(): void {
+    console.log('updateFilters called');
+    console.log('Current filterCriteria:', this.filterCriteria);
+
+    this.displayValues = {...this.filterCriteria};
+
+    console.log('Updated displayValues:', this.displayValues);
+    console.log('All products count:', this.allProducts?.length);
   }
 
-  // The actual filtering logic
-  applyFilters(): void {
-    let filteredProducts = [...this.allProducts];
 
-    // Filter by category
-    if (this.filterValues.category) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.category === this.filterValues.category
-      );
-    }
-
-    // Filter by title
-    if (this.filterValues.title) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.title.toLowerCase().includes(this.filterValues.title.toLowerCase())
-      );
-    }
-
-    // Filter by min price
-    if (this.filterValues.minPrice !== null) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.price >= this.filterValues.minPrice!
-      );
-    }
-
-    // Filter by max price
-    if (this.filterValues.maxPrice !== null) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.price <= this.filterValues.maxPrice!
-      );
-    }
-
-    this.products = filteredProducts;
-  }
-
+  // Reset all filters
   resetFilters(): void {
-    this.filterValues = {
+    this.filterCriteria = {
       category: '',
       title: '',
       minPrice: null,
       maxPrice: null
     };
-    this.displayValues = {...this.filterValues};
-    this.products = [...this.allProducts];
+    this.displayValues = {...this.filterCriteria};
+    console.log('Filters reset');
+  }
+
+
+  // Get filtered products count (used in template)
+  getFilteredProductsCount(): number {
+    // This will be calculated by the pipe, but we can use this helper for display
+    if (!this.allProducts || !this.allProducts.length) {
+      return 0;
+    }
+
+    return this.allProducts.filter(product => {
+      // Same logic as in the pipe for consistency
+      if (this.filterCriteria.category && this.filterCriteria.category.trim() !== '') {
+        if (product.category !== this.filterCriteria.category) {
+          return false;
+        }
+      }
+
+      if (this.filterCriteria.title && this.filterCriteria.title.trim() !== '') {
+        if (!product.title.toLowerCase().includes(this.filterCriteria.title.toLowerCase())) {
+          return false;
+        }
+      }
+
+      if (this.filterCriteria.minPrice !== null && this.filterCriteria.minPrice !== undefined) {
+        if (product.price < this.filterCriteria.minPrice) {
+          return false;
+        }
+      }
+
+      if (this.filterCriteria.maxPrice !== null && this.filterCriteria.maxPrice !== undefined) {
+        if (product.price > this.filterCriteria.maxPrice) {
+          return false;
+        }
+      }
+
+      return true;
+    }).length;
   }
 
   addToCart(product: Product): void {
@@ -145,14 +156,22 @@ export class ProductsComponent implements OnInit {
   // Get image URL with fallbacks
   getImageUrl(product: Product): string {
     if (product.thumbnail) {
-      console.log('Using thumbnail:', product.thumbnail);
       return product.thumbnail;
     }
     if (product.images && product.images.length > 0) {
-      console.log('Using first image:', product.images[0]);
       return product.images[0];
     }
-    console.log('No image available for product:', product.title);
     return 'https://via.placeholder.com/200x200?text=No+Image';
+  }
+
+  // Helper method for star rating classes
+  getStarClass(starNumber: number, rating: number): string {
+    if (starNumber <= Math.floor(rating)) {
+      return 'filled';
+    } else if (starNumber === Math.ceil(rating) && rating % 1 !== 0) {
+      return 'half-filled';
+    } else {
+      return 'empty';
+    }
   }
 }

@@ -1,148 +1,103 @@
-/*.card {*/
-/*  transition: transform 0.2s;*/
-/*}*/
+/* Star Rating Styles */
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
 
-/*.card:hover {*/
-/*  transform: translateY(-2px);*/
-/*  box-shadow: 0 4px 8px rgba(0,0,0,0.1);*/
-/*}*/
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  color: #e0e0e0; /* Default gray color for empty stars */
+  transition: color 0.2s ease;
+}
 
-/*.badge {*/
-/*  font-size: 0.8em;*/
-/*}*/
+.star.filled {
+  color: #ffc107; /* Bootstrap warning yellow */
+}
 
-/*.card-img-top-container {*/
-/*  height: 200px;*/
-/*  overflow: hidden;*/
-/*  background-color: #f8f9fa;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*}*/
+.star.half-filled {
+  background: linear-gradient(90deg, #ffc107 50%, #e0e0e0 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ffc107;
+}
 
-/*.product-image {*/
-/*  width: 100%;*/
-/*  height: 100%;*/
-/*  object-fit: contain;*/
-/*  transition: transform 0.3s ease;*/
-/*}*/
+.star.empty {
+  color: #e0e0e0;
+}
 
-/*.product-image:hover {*/
-/*  transform: scale(1.05);*/
-/*}*/
-/*.card-img-top-container {*/
-/*  height: 200px;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*  overflow: hidden;*/
-/*  padding: 1rem;*/
-/*}*/
+/* Alternative approach for half stars using pseudo-elements */
+.star.half-filled::before {
+  content: '\f005'; /* FontAwesome star */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #ffc107;
+}
 
-/*.product-image {*/
-/*  max-width: 100%;*/
-/*  max-height: 100%;*/
-/*  object-fit: contain;*/
-/*}*/
 
-/*.card {*/
-/*  transition: transform 0.3s ease, box-shadow 0.3s ease;*/
-/*}*/
+/* Rating text styling */
+.rating-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c757d;
+}
 
-/*.card:hover {*/
-/*  transform: translateY(-5px);*/
-/*  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);*/
-/*}*/
-/*.card-img-top-container img[src*="placeholder"] {*/
-/*  opacity: 0.6;*/
-/*  background-color: #e9ecef;*/
-/*}*/
-
+/* Product card improvements */
 .product-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  border: 1px solid #e0e0e0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #dee2e6;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
+/* Product image styling */
 .product-image {
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s ease;
 }
 
 .product-card:hover .product-image {
   transform: scale(1.05);
 }
 
-.card-title {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-}
-
+/* Badge styling improvements */
 .badge {
-  font-size: 0.75rem;
+  font-size: 0.7em;
+  padding: 0.25em 0.5em;
 }
 
-.spinner-border {
-  width: 3rem;
-  height: 3rem;
+/* Button hover effects */
+.btn-primary.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
 }
 
-.form-label {
-  font-weight: 500;
-  color: #495057;
+/* Star rating container spacing */
+.star-rating .star {
+  margin-right: 2px;
 }
 
-.text-danger {
-  background-color: #dc3545 !important;
-}
-
-.text-warning {
-  background-color: #ffc107 !important;
-  color: #000 !important;
-}
-
-.text-success {
-  background-color: #28a745 !important;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.alert {
-  border-radius: 10px;
-}
-
-.card {
-  border-radius: 10px;
-}
-
-.btn {
-  border-radius: 6px;
-}
-
-.form-control, .form-select {
-  border-radius: 6px;
+.star-rating .star:last-child {
+  margin-right: 0;
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .col-md-3, .col-md-2 {
-    margin-bottom: 1rem;
+@media (max-width: 576px) {
+  .star {
+    font-size: 12px;
   }
 
-  .product-card {
-    margin-bottom: 1.5rem;
+  .rating-text {
+    font-size: 11px;
   }
-}
-
-/* Stars styling */
-.fa-star {
-  font-size: 0.875rem;
 }

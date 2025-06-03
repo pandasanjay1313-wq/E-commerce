@@ -7,13 +7,15 @@ import { App } from './app';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProductsComponent } from './components/products/products.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ProductFilterPipe } from './pipes/product-filter-pipe';
 
 @NgModule({
   declarations: [
     App,
     NavbarComponent,
     ProductsComponent,
-    FooterComponent
+    FooterComponent,
+    ProductFilterPipe
   ],
   imports: [
     BrowserModule,

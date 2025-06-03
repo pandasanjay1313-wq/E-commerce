@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -14,7 +13,7 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<Product[]>{
-    return this.http.get<any>(`${this.baseUrl}/products`)
+    return this.http.get<any>(`${this.baseUrl}/products?limit=0`)
       .pipe(
         tap(response => {
           console.log('Raw API Response:', response);
