@@ -1,59 +1,35 @@
-# Untitled
+# Angular E-commerce Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+A modern e-commerce product showcase application built with Angular 20 and Bootstrap 5. This application displays a collection of products with filtering capabilities, responsive design, and a clean user interface.
 
-## Development server
+![ProductApp-06-03-2025_10_07_PM](https://github.com/user-attachments/assets/a9067ca0-1074-4aa3-9e60-34cd131f5fce)
 
-To start a local development server, run:
+##  Features
 
-```bash
-ng serve
-```
+- **Product Showcase**: Display products with images, prices, stock levels, and categories
+- **Responsive Design**: Mobile-first design using Bootstrap 5
+- **Product Filtering**: Filter products by category, title, and price range
+- **Modern UI**: Clean and intuitive user interface with Font Awesome icons
+- **Stock Management**: Visual indicators for stock levels (low, medium, high)
+- **Image Handling**: Fallback images for missing product images
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ️ Technologies Used
 
-## Code scaffolding
+- **Frontend Framework**: Angular 20.0.0
+- **Styling**: Bootstrap 5.3.0
+- **Icons**: Font Awesome 6.0.0
+- **Language**: TypeScript 5.8.2
+- **Build Tool**: Angular CLI 20.0.0
+- **Package Manager**: npm
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+##  Prerequisites
 
-```bash
-ng generate component component-name
-```
+Before running this application, make sure you have the following installed:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+- [Angular CLI](https://angular.io/cli) (v20 or higher)
 
 ```bash
-ng test
+npm install -g @angular/cli
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
