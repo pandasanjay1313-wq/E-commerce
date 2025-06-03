@@ -1,91 +1,321 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">Our Products</h2>
+<!--<div class="container my-5">-->
+<!--  <h2 class="text-center mb-4">Our Products</h2>-->
 
-  <!-- Total Products Display -->
-  <div class="alert alert-info text-center">
-    <strong>Total Products: {{ products.length }}</strong>
+<!--  &lt;!&ndash; Total Products Display &ndash;&gt;-->
+<!--  <div class="alert alert-info text-center">-->
+<!--    <strong>Total Products: {{ products.length }}</strong>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Filter Form &ndash;&gt;-->
+<!--  <div class="card mb-4">-->
+<!--    <div class="card-header">-->
+<!--      <h5>Filter Products</h5>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--      <form class="row g-3">-->
+<!--        <div class="col-md-3">-->
+<!--          <label for="categoryFilter" class="form-label">Category</label>-->
+<!--          <select class="form-select" id="categoryFilter"-->
+<!--                  [(ngModel)]="filterValues.category"-->
+<!--                  name="category"-->
+<!--                  (change)="updateFilterDisplay()">-->
+<!--            <option value="">All</option>-->
+<!--            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <label for="titleFilter" class="form-label">Product Title</label>-->
+<!--          <input type="text" class="form-control" id="titleFilter"-->
+<!--                 placeholder="Search by title..."-->
+<!--                 [(ngModel)]="filterValues.title"-->
+<!--                 name="title"-->
+<!--                 (input)="updateFilterDisplay()">-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <label for="priceFilter" class="form-label">Min Price ($)</label>-->
+<!--          <input type="number" class="form-control" id="priceFilter"-->
+<!--                 placeholder="Enter min price"-->
+<!--                 [(ngModel)]="filterValues.minPrice"-->
+<!--                 name="minPrice"-->
+<!--                 (input)="updateFilterDisplay()">-->
+<!--        </div>-->
+
+<!--        <div class="col-md-3">-->
+<!--          <label for="priceFilter" class="form-label">Max Price ($)</label>-->
+<!--          <input type="number" class="form-control" id="priceFilter"-->
+<!--                 placeholder="Enter max price"-->
+<!--                 [(ngModel)]="filterValues.maxPrice"-->
+<!--                 name="maxPrice"-->
+<!--                 (input)="updateFilterDisplay()">-->
+<!--        </div>-->
+<!--        <div class="col-12">-->
+<!--          <button type="button" class="btn btn-primary w-100">Apply</button>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Current Filter Values Display &ndash;&gt;-->
+<!--  <div class="card mb-4">-->
+<!--    <div class="card-header">-->
+<!--      <h6>Current Filter Values</h6>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--      <div class="row">-->
+<!--        <div class="col-md-3">-->
+<!--          <strong>Category:</strong> {{ displayValues.category || 'All' }}-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <strong>Title Search:</strong> {{ displayValues.title || 'None' }}-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <strong>Min Price:</strong> {{ displayValues.minPrice || 'None' }}-->
+<!--        </div>-->
+<!--        <div class="col-md-3">-->
+<!--          <strong>Max Price:</strong> {{ displayValues.maxPrice || 'None' }}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  &lt;!&ndash; Product List &ndash;&gt;-->
+<!--  <div class="row">-->
+<!--    <h4 class="mb-3">Product List</h4>-->
+<!--    <div class="col-lg-3 col-md-6 mb-4" *ngFor="let product of products">-->
+<!--      <div class="card h-100">-->
+<!--        &lt;!&ndash; Product Image Section &ndash;&gt;-->
+<!--        <div class="card-img-top-container">-->
+<!--          <img [src]="product.image || 'https://via.placeholder.com/250x200?text=No+Image'"-->
+<!--               [alt]="product.title"-->
+<!--               class="card-img-top product-image">-->
+<!--        </div>-->
+<!--        <div class="card-body d-flex flex-column">-->
+<!--          <h5 class="card-title">{{ product.title }}</h5>-->
+<!--          <p class="card-text">-->
+<!--            <span class="badge bg-secondary mb-2">{{ product.category }}</span><br>-->
+<!--            <strong>Price: </strong> ${{ product.price }}<br>-->
+<!--            <strong>Stock: </strong>-->
+<!--            <span [class]="getStockClass(product.stock)">{{ product.stock }} units</span>-->
+<!--          </p>-->
+<!--          <button class="btn btn-primary mt-auto">Add to Cart</button>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<div class="container mt-4">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="text-center mb-4">Product Catalog</h2>
+    </div>
   </div>
 
-  <!-- Filter Form -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5>Filter Products</h5>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-    <div class="card-body">
-      <form class="row g-3">
-        <div class="col-md-4">
-          <label for="categoryFilter" class="form-label">Category</label>
-          <select class="form-select" id="categoryFilter"
-                  [(ngModel)]="filterValues.category"
-                  name="category"
-                  (change)="updateFilterDisplay()">
-            <option value="">All</option>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label for="titleFilter" class="form-label">Product Title</label>
-          <input type="text" class="form-control" id="titleFilter"
-                 placeholder="Search by title..."
-                 [(ngModel)]="filterValues.title"
-                 name="title"
-                 (input)="updateFilterDisplay()">
-        </div>
-        <div class="col-md-4">
-          <label for="priceFilter" class="form-label">Max Price ($)</label>
-          <input type="number" class="form-control" id="priceFilter"
-                 placeholder="Enter max price"
-                 [(ngModel)]="filterValues.maxPrice"
-                 name="maxPrice"
-                 (input)="updateFilterDisplay()">
-        </div>
-        <div class="col-12">
-          <button type="button" class="btn btn-primary w-100">Apply</button>
-        </div>
-      </form>
-    </div>
+    <p class="mt-2">Loading products...</p>
   </div>
 
-  <!-- Current Filter Values Display -->
-  <div class="card mb-4">
-    <div class="card-header">
-      <h6>Current Filter Values</h6>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-4">
-          <strong>Category:</strong> {{ displayValues.category || 'All' }}
+  <!-- Filters Section -->
+  <div *ngIf="!isLoading" class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Filter Products
+          </h5>
         </div>
-        <div class="col-md-4">
-          <strong>Title Search:</strong> {{ displayValues.title || 'None' }}
-        </div>
-        <div class="col-md-4">
-          <strong>Max Price:</strong> {{ displayValues.maxPrice || 'None' }}
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Category Filter -->
+            <div class="col-md-3">
+              <label for="categoryFilter" class="form-label">Category</label>
+              <select
+                id="categoryFilter"
+                class="form-select"
+                [(ngModel)]="filterValues.category"
+                (change)="updateFilterDisplay()">
+                <option value="">All Categories</option>
+                <option *ngFor="let category of categories" [value]="category">
+                  {{ category | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Title Filter -->
+            <div class="col-md-3">
+              <label for="titleFilter" class="form-label">Product Name</label>
+              <input
+                type="text"
+                id="titleFilter"
+                class="form-control"
+                placeholder="Search by name..."
+                [(ngModel)]="filterValues.title"
+                (input)="updateFilterDisplay()">
+            </div>
+
+            <!-- Min Price Filter -->
+            <div class="col-md-2">
+              <label for="minPriceFilter" class="form-label">Min Price</label>
+              <input
+                type="number"
+                id="minPriceFilter"
+                class="form-control"
+                placeholder="0"
+                min="0"
+                step="0.01"
+                [(ngModel)]="filterValues.minPrice"
+                (input)="updateFilterDisplay()">
+            </div>
+
+            <!-- Max Price Filter -->
+            <div class="col-md-2">
+              <label for="maxPriceFilter" class="form-label">Max Price</label>
+              <input
+                type="number"
+                id="maxPriceFilter"
+                class="form-control"
+                placeholder="1000"
+                min="0"
+                step="0.01"
+                [(ngModel)]="filterValues.maxPrice"
+                (input)="updateFilterDisplay()">
+            </div>
+
+            <!-- Reset Button -->
+            <div class="col-md-2 d-flex align-items-end">
+              <button
+                type="button"
+                class="btn btn-outline-secondary w-100"
+                (click)="resetFilters()"
+                title="Reset all filters">
+                <i class="fas fa-undo me-1"></i>Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Filters Display -->
+          <div *ngIf="displayValues.category || displayValues.title || displayValues.minPrice || displayValues.maxPrice"
+               class="mt-3 pt-3 border-top">
+            <h6 class="text-muted mb-2">Active Filters:</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <span *ngIf="displayValues.category" class="badge bg-primary">
+                Category: {{ displayValues.category | titlecase }}
+              </span>
+              <span *ngIf="displayValues.title" class="badge bg-info">
+                Name: "{{ displayValues.title }}"
+              </span>
+              <span *ngIf="displayValues.minPrice" class="badge bg-success">
+                Min: ${{ displayValues.minPrice }}
+              </span>
+              <span *ngIf="displayValues.maxPrice" class="badge bg-warning text-dark">
+                Max: ${{ displayValues.maxPrice }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Product List -->
-  <div class="row">
-    <h4 class="mb-3">Product List</h4>
-    <div class="col-lg-3 col-md-6 mb-4" *ngFor="let product of products">
-      <div class="card h-100">
-        <!-- Product Image Section -->
-        <div class="card-img-top-container">
-          <img [src]="product.image || 'https://via.placeholder.com/250x200?text=No+Image'"
-               [alt]="product.title"
-               class="card-img-top product-image">
+  <!-- Results Summary -->
+  <div *ngIf="!isLoading" class="row mb-3">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="text-muted mb-0">
+          Showing {{ products.length }} of {{ allProducts.length }} products
+        </h5>
+        <small class="text-muted">
+          Total: {{ allProducts.length }} products available
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div *ngIf="!isLoading && products.length === 0" class="row">
+    <div class="col-12">
+      <div class="alert alert-info text-center" role="alert">
+        <i class="fas fa-search fa-2x mb-3"></i>
+        <h5>No products found</h5>
+        <p class="mb-3">Try adjusting your filters or search criteria.</p>
+        <button type="button" class="btn btn-primary" (click)="resetFilters()">
+          <i class="fas fa-undo me-1"></i>Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div *ngIf="!isLoading && products.length > 0" class="row">
+    <div *ngFor="let product of products" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <div class="card h-100 shadow-sm product-card">
+        <!-- Product Image -->
+        <div class="position-relative">
+          <img
+            [src]="product.image"
+            [alt]="product.title"
+            class="card-img-top product-image"
+            style="height: 200px; object-fit: contain; padding: 10px;">
+
+          <!-- Stock Badge -->
+          <span *ngIf="product.stock !== undefined"
+                class="position-absolute top-0 end-0 m-2 badge text-white"
+                [ngClass]="getStockBadgeClass(product.stock)">
+            {{ product.stock }} in stock
+          </span>
         </div>
+
+        <!-- Product Details -->
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ product.title }}</h5>
-          <p class="card-text">
-            <span class="badge bg-secondary mb-2">{{ product.category }}</span><br>
-            <strong>Price: </strong> ${{ product.price }}<br>
-            <strong>Stock: </strong>
-            <span [class]="getStockClass(product.stock)">{{ product.stock }} units</span>
+          <!-- Category -->
+          <span class="badge bg-light text-dark mb-2 align-self-start">
+            {{ product.category | titlecase }}
+          </span>
+
+          <!-- Title -->
+          <h6 class="card-title" [title]="product.title">
+            {{ product.title.length > 50 ? (product.title | slice:0:50) + '...' : product.title }}
+          </h6>
+
+          <!-- Description -->
+          <p class="card-text text-muted small flex-grow-1">
+            {{ product.description.length > 100 ? (product.description | slice:0:100) + '...' : product.description }}
           </p>
-          <button class="btn btn-primary mt-auto">Add to Cart</button>
+
+          <!-- Rating -->
+          <div class="mb-2">
+            <div class="d-flex align-items-center">
+              <div class="text-warning me-2">
+                <i *ngFor="let star of [1,2,3,4,5]"
+                   class="fas fa-star"
+                   [ngClass]="star <= product.rating.rate ? 'text-warning' : 'text-muted'"></i>
+              </div>
+              <small class="text-muted">
+                {{ product.rating.rate }}/5 ({{ product.rating.count }} reviews)
+              </small>
+            </div>
+          </div>
+
+          <!-- Price and Add to Cart -->
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="text-primary mb-0">${{ product.price.toFixed(2) }}</h5>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                (click)="addToCart(product)"
+                [disabled]="product.stock === 0">
+                <i class="fas fa-cart-plus me-1"></i>
+                {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
