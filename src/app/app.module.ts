@@ -1,28 +1,30 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-import { App } from './app';
+import { AppComponent } from './app';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProductsComponent } from './components/products/products.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ProductFilterPipe } from './pipes/product-filter-pipe';
+
+import { appRoutes } from './app.routes';
 
 @NgModule({
   declarations: [
-    App,
+    AppComponent,
     NavbarComponent,
     ProductsComponent,
-    FooterComponent,
-    ProductFilterPipe
+    FooterComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(appRoutes, { enableTracing: false })
   ],
   providers: [],
-  bootstrap: [App]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
