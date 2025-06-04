@@ -2,7 +2,13 @@
 
 A modern e-commerce product showcase application built with Angular 20 and Bootstrap 5. This application displays a collection of products with filtering capabilities, responsive design, and a clean user interface.
 
-![ProductApp-06-03-2025_10_07_PM](https://github.com/user-attachments/assets/a9067ca0-1074-4aa3-9e60-34cd131f5fce)
+![Products.png](screenshots/Products.png)
+
+![Product details.png](screenshots/Product%20details.png)
+
+![Shopping Cart.png](screenshots/Shopping%20Cart.png)
+
+![Order Confirmation.png](screenshots/Order%20Confirmation.png)
 
 ##  Features
 
