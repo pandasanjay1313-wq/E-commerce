@@ -20,7 +20,7 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${this.baseUrl}/products?limit=100`)
+    return this.http.get<ProductsResponse>(`${this.baseUrl}/products?limit=0`)
       .pipe(
         catchError(this.handleError)
       );
