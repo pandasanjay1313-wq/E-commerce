@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CartService } from '../../services/cart';
+import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/product.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';

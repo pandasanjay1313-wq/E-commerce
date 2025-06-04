@@ -1,58 +1,255 @@
-
 <div class="container mt-4">
-  <h2 class="mb-4">Our Products</h2>
-
-  <div *ngIf="loading" class="text-center">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="text-center mb-4">Product Catalog</h2>
     </div>
   </div>
 
-  <div class="row" *ngIf="!loading">
-    <div class="col-md-4 col-sm-6 mb-4" *ngFor="let product of products">
-      <div class="card h-100 product-card">
-        <!-- Clickable image -->
-        <div class="image-container" (click)="viewDetails(product.id)">
-          <img [src]="product.thumbnail"
-               [alt]="product.title"
-               class="card-img-top clickable-image"
-               style="height: 200px; object-fit: cover; cursor: pointer;">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading products...</p>
+  </div>
+
+  <!-- Filters Section -->
+  <div *ngIf="!isLoading" class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Filter Products
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Category Filter -->
+            <div class="col-md-3">
+              <label for="categoryFilter" class="form-label">Category</label>
+              <select
+                id="categoryFilter"
+                class="form-select"
+                [(ngModel)]="filterCriteria.category"
+                (change)="updateFilters()">
+                <option value="">All Categories ({{ categories.length }} available)</option>
+                <option *ngFor="let category of categories" [value]="category">
+                  {{ category | titlecase }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Title Filter -->
+            <div class="col-md-3">
+              <label for="titleFilter" class="form-label">Product Name</label>
+              <input
+                type="text"
+                id="titleFilter"
+                class="form-control"
+                placeholder="Search by name..."
+                [(ngModel)]="filterCriteria.title"
+                (input)="updateFilters()">
+            </div>
+
+            <!-- Min Price Filter -->
+            <div class="col-md-2">
+              <label for="minPriceFilter" class="form-label">Min Price</label>
+              <input
+                type="number"
+                id="minPriceFilter"
+                class="form-control"
+                placeholder="0"
+                min="0"
+                step="0.01"
+                [(ngModel)]="filterCriteria.minPrice"
+                (input)="updateFilters()">
+            </div>
+
+            <!-- Max Price Filter -->
+            <div class="col-md-2">
+              <label for="maxPriceFilter" class="form-label">Max Price</label>
+              <input
+                type="number"
+                id="maxPriceFilter"
+                class="form-control"
+                placeholder="1000"
+                min="0"
+                step="0.01"
+                [(ngModel)]="filterCriteria.maxPrice"
+                (input)="updateFilters()">
+            </div>
+
+            <!-- Reset Button -->
+            <div class="col-md-2 d-flex align-items-end">
+              <button
+                type="button"
+                class="btn btn-outline-secondary w-100"
+                (click)="resetFilters()"
+                title="Reset all filters">
+                <i class="fas fa-undo me-1"></i>Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Filters Display -->
+          <div *ngIf="displayValues.category || displayValues.title || displayValues.minPrice || displayValues.maxPrice"
+               class="mt-3 pt-3 border-top">
+            <h6 class="text-muted mb-2">Active Filters:</h6>
+            <div class="d-flex flex-wrap gap-2">
+              <span *ngIf="displayValues.category" class="badge bg-primary">
+                Category: {{ displayValues.category | titlecase }}
+              </span>
+              <span *ngIf="displayValues.title" class="badge bg-info">
+                Name: "{{ displayValues.title }}"
+              </span>
+              <span *ngIf="displayValues.minPrice" class="badge bg-success">
+                Min: ${{ displayValues.minPrice }}
+              </span>
+              <span *ngIf="displayValues.maxPrice" class="badge bg-warning text-dark">
+                Max: ${{ displayValues.maxPrice }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Summary -->
+  <div *ngIf="!isLoading" class="row mb-3">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="text-muted mb-0">
+          Showing {{ getFilteredProductsCount() }} of {{ allProducts.length }} products
+        </h5>
+        <small class="text-muted">
+          Categories: {{ categories.length }} | Total Products: {{ allProducts.length }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div *ngIf="!isLoading && allProducts.length === 0" class="row">
+    <div class="col-12">
+      <div class="alert alert-warning text-center" role="alert">
+        <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+        <h5>No products loaded</h5>
+        <p class="mb-3">There seems to be an issue loading products from the server.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Filter Results Message -->
+  <div *ngIf="!isLoading && allProducts.length > 0 && getFilteredProductsCount() === 0" class="row">
+    <div class="col-12">
+      <div class="alert alert-info text-center" role="alert">
+        <i class="fas fa-search fa-2x mb-3"></i>
+        <h5>No products found</h5>
+        <p class="mb-3">Try adjusting your filters or search criteria.</p>
+        <button type="button" class="btn btn-primary" (click)="resetFilters()">
+          <i class="fas fa-undo me-1"></i>Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div *ngIf="!isLoading && getFilteredProductsCount() > 0" class="row">
+    <div *ngFor="let product of getFilteredProducts()" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <div class="card h-100 shadow-sm product-card" (click)="viewProductDetails(product.id)">
+        <!-- Product Image -->
+        <div class="position-relative clickable-area">
+          <img
+            [src]="getImageUrl(product)"
+            [alt]="product.title"
+            class="card-img-top product-image"
+            style="height: 200px; object-fit: contain; padding: 10px; background-color: #f8f9fa;"
+            (error)="onImageError($event, product)"
+            loading="lazy">
+
+          <!-- Hover overlay -->
           <div class="image-overlay">
             <i class="fas fa-eye"></i>
             <span>View Details</span>
           </div>
+
+          <!-- Stock Badge -->
+          <span class="position-absolute top-0 end-0 m-2 badge text-white"
+                [ngClass]="getStockBadgeClass(product.stock)">
+            {{ product.stock }} in stock
+          </span>
+
+          <!-- Discount Badge -->
+          <span *ngIf="product.discountPercentage && product.discountPercentage > 0"
+                class="position-absolute top-0 start-0 m-2 badge bg-danger">
+            -{{ product.discountPercentage.toFixed(0) }}%
+          </span>
         </div>
 
+        <!-- Product Details -->
         <div class="card-body d-flex flex-column">
-          <!-- Clickable title -->
-          <h5 class="card-title clickable-title" (click)="viewDetails(product.id)">
-            {{ product.title }}
-          </h5>
-
-          <p class="card-text text-muted small">{{ product.brand }}</p>
-          <p class="card-text flex-fill">{{ product.description | slice:0:100 }}...</p>
-
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="h5 text-success mb-0">${{ product.price }}</span>
-            <span class="text-warning">
-              <i class="fas fa-star"></i> {{ product.rating }}
+          <!-- Category and Brand -->
+          <div class="d-flex justify-content-between mb-2">
+            <span class="badge bg-light text-dark">
+              {{ product.category | titlecase }}
             </span>
+            <small *ngIf="product.brand" class="text-muted">
+              {{ product.brand }}
+            </small>
           </div>
 
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <small class="text-muted">Stock: {{ product.stock }}</small>
-            <small class="text-muted">{{ product.category }}</small>
+          <!-- Title - Clickable -->
+          <h6 class="card-title clickable-title" [title]="product.title">
+            {{ product.title.length > 50 ? (product.title | slice:0:50) + '...' : product.title }}
+          </h6>
+
+          <!-- Description -->
+          <p class="card-text text-muted small flex-grow-1">
+            {{ product.description.length > 100 ? (product.description | slice:0:100) + '...' : product.description }}
+          </p>
+
+          <!-- Rating with Better Stars -->
+          <div class="mb-2">
+            <div class="d-flex align-items-center">
+              <div class="star-rating me-2">
+                <span
+                  *ngFor="let star of [1,2,3,4,5]"
+                  class="star"
+                  [ngClass]="{
+                    'filled': star <= Math.floor(product.rating),
+                    'half-filled': star === Math.ceil(product.rating) && product.rating % 1 !== 0,
+                    'empty': star > Math.ceil(product.rating)
+                  }">
+                  <i class="fas fa-star"></i>
+                </span>
+              </div>
+              <small class="text-muted rating-text">
+                {{ product.rating.toFixed(1) }}/5
+              </small>
+            </div>
           </div>
 
-          <div class="btn-group w-100">
-            <button class="btn btn-outline-primary" (click)="viewDetails(product.id)">
-              <i class="fas fa-info-circle"></i> Details
-            </button>
-            <button class="btn btn-primary"
-                    (click)="addToCart(product)"
-                    [disabled]="product.stock === 0">
-              <i class="fas fa-cart-plus"></i> Add to Cart
-            </button>
+          <!-- Price and Add to Cart -->
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="text-primary mb-0">${{ product.price.toFixed(2) }}</h5>
+                <small *ngIf="product.discountPercentage && product.discountPercentage > 0"
+                       class="text-muted text-decoration-line-through">
+                  ${{ (product.price / (1 - product.discountPercentage / 100)).toFixed(2) }}
+                </small>
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                (click)="addToCart(product); $event.stopPropagation()"
+                [disabled]="product.stock === 0">
+                <i class="fas fa-cart-plus me-1"></i>
+                {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+              </button>
+            </div>
           </div>
         </div>
       </div>

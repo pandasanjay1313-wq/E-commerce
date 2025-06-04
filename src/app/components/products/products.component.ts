@@ -1,8 +1,8 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/product.model';
-import { ProductService } from '../../services/product';
-import { CartService } from '../../services/cart';
+import { ProductFilterCriteria } from '../../pipes/product-filter-pipe';
+import { ProductService } from '../../services/product.service';
+import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,8 +12,25 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] = [];
-  loading: boolean = true;
+  allProducts: Product[] = [];
+  categories: string[] = [];
+  isLoading: boolean = true;
+
+  // Filter properties
+  filterCriteria: ProductFilterCriteria = {
+    category: '',
+    title: '',
+    minPrice: null,
+    maxPrice: null
+  };
+
+  // Display values for active filters
+  displayValues: ProductFilterCriteria = {
+    category: '',
+    title: '',
+    minPrice: null,
+    maxPrice: null
+  };
 
   constructor(
     private productService: ProductService,
@@ -22,28 +39,184 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadProducts();
+    console.log('ProductsComponent initialized');
+    this.loadData();
   }
 
-  loadProducts(): void {
+  loadData(): void {
+    console.log('Loading data...');
+
+    // Load products first
     this.productService.getProducts().subscribe({
       next: (response) => {
-        this.products = response.products;
-        this.loading = false;
+        console.log('Products response:', response);
+        this.allProducts = response.products;
+
+        // Always extract categories from products as fallback
+        this.extractCategories();
+
+        // Try to load categories from API to supplement
+        this.loadCategoriesFromAPI();
+
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading products:', error);
-        this.loading = false;
+        this.isLoading = false;
       }
     });
   }
 
-  addToCart(product: Product): void {
-    this.cartService.addToCart(product);
-    alert(`${product.title} added to cart!`);
+  loadCategoriesFromAPI(): void {
+    console.log('Attempting to load categories from API...');
+
+    this.productService.getCategories().subscribe({
+      next: (apiCategories) => {
+        console.log('Categories API response:', apiCategories);
+
+        if (apiCategories && apiCategories.length > 0) {
+          // Merge API categories with extracted ones, remove duplicates
+          const allCategories = [...new Set([...this.categories, ...apiCategories])];
+          this.categories = allCategories.sort();
+          console.log('Final merged categories:', this.categories);
+        } else {
+          console.log('No valid categories from API, using extracted categories');
+        }
+      },
+      error: (error) => {
+        console.error('Error loading categories from API, using extracted categories:', error);
+        // Categories already extracted from products, so we're good
+      }
+    });
   }
 
-  viewDetails(productId: number): void {
+  private extractCategories(): void {
+    console.log('Extracting categories from products...');
+    if (this.allProducts && this.allProducts.length > 0) {
+      const categorySet = new Set(
+        this.allProducts
+          .map(product => product.category)
+          .filter(category => category && typeof category === 'string')
+          .map(category => category.trim())
+      );
+      this.categories = Array.from(categorySet).sort();
+      console.log('Extracted categories:', this.categories);
+    }
+  }
+
+  updateFilters(): void {
+    console.log('Updating filters:', this.filterCriteria);
+    this.displayValues = {
+      category: this.filterCriteria.category,
+      title: this.filterCriteria.title,
+      minPrice: this.filterCriteria.minPrice,
+      maxPrice: this.filterCriteria.maxPrice
+    };
+  }
+
+  resetFilters(): void {
+    console.log('Resetting filters');
+    this.filterCriteria = {
+      category: '',
+      title: '',
+      minPrice: null,
+      maxPrice: null
+    };
+    this.displayValues = {
+      category: '',
+      title: '',
+      minPrice: null,
+      maxPrice: null
+    };
+  }
+
+  getFilteredProducts(): Product[] {
+    if (!this.allProducts) return [];
+
+    return this.allProducts.filter(product => {
+      // Category filter
+      if (this.filterCriteria.category && this.filterCriteria.category.trim() !== '') {
+        if (product.category.toLowerCase() !== this.filterCriteria.category.toLowerCase()) {
+          return false;
+        }
+      }
+
+      // Title filter
+      if (this.filterCriteria.title && this.filterCriteria.title.trim() !== '') {
+        const searchTerm = this.filterCriteria.title.toLowerCase().trim();
+        const productTitle = product.title.toLowerCase();
+        if (!productTitle.includes(searchTerm)) {
+          return false;
+        }
+      }
+
+      // Min price filter
+      if (this.filterCriteria.minPrice !== null &&
+        this.filterCriteria.minPrice !== undefined &&
+        this.filterCriteria.minPrice > 0) {
+        if (product.price < this.filterCriteria.minPrice) {
+          return false;
+        }
+      }
+
+      // Max price filter
+      if (this.filterCriteria.maxPrice !== null &&
+        this.filterCriteria.maxPrice !== undefined &&
+        this.filterCriteria.maxPrice > 0) {
+        if (product.price > this.filterCriteria.maxPrice) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
+  getFilteredProductsCount(): number {
+    return this.getFilteredProducts().length;
+  }
+
+  addToCart(product: Product): void {
+    this.cartService.addToCart(product);
+    this.showSuccessMessage(product.title);
+  }
+
+  viewProductDetails(productId: number): void {
     this.router.navigate(['/products', productId]);
+  }
+
+  getImageUrl(product: Product): string {
+    return product.thumbnail || '/assets/images/placeholder.jpg';
+  }
+
+  onImageError(event: any, product: Product): void {
+    event.target.src = '/assets/images/placeholder.jpg';
+  }
+
+  getStockBadgeClass(stock: number): string {
+    if (stock === 0) return 'bg-danger';
+    if (stock < 10) return 'bg-warning';
+    return 'bg-success';
+  }
+
+  Math = Math;
+
+  private showSuccessMessage(productTitle: string): void {
+    const message = document.createElement('div');
+    message.className = 'alert alert-success position-fixed';
+    message.style.top = '20px';
+    message.style.right = '20px';
+    message.style.zIndex = '9999';
+    message.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      ${productTitle} added to cart!
+    `;
+    document.body.appendChild(message);
+
+    setTimeout(() => {
+      if (document.body.contains(message)) {
+        document.body.removeChild(message);
+      }
+    }, 3000);
   }
 }

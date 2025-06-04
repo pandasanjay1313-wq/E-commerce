@@ -1,5 +1,5 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {Product} from '../models/product.model';
+import { Pipe, PipeTransform } from '@angular/core';
+import { Product } from '../models/product.model';
 
 export interface ProductFilterCriteria {
   category?: string;
@@ -11,61 +11,46 @@ export interface ProductFilterCriteria {
 @Pipe({
   name: 'productFilter',
   standalone: false,
-  pure: false  // Changed to false to ensure proper change detection
+  pure: false // Make it impure to detect changes in filter criteria
 })
 export class ProductFilterPipe implements PipeTransform {
-
-  transform(products: Product[], filters: ProductFilterCriteria): Product[] {
-    // If no products exist, return empty array
-    if (!products || !products.length) {
-      return [];
-    }
-
-    // If no filters are applied, return all products
-    if (!filters || this.isEmpty(filters)) {
+  transform(products: Product[], criteria: ProductFilterCriteria): Product[] {
+    if (!products || !criteria) {
       return products;
     }
 
-    // Filter the products based on criteria
     return products.filter(product => {
-      // Filter by category
-      if (filters.category && filters.category.trim() !== '') {
-        if (product.category !== filters.category) {
+      // Category filter
+      if (criteria.category && criteria.category.trim() !== '') {
+        if (product.category.toLowerCase() !== criteria.category.toLowerCase()) {
           return false;
         }
       }
 
-      // Filter by title (case-insensitive search)
-      if (filters.title && filters.title.trim() !== '') {
-        if (!product.title.toLowerCase().includes(filters.title.toLowerCase())) {
+      // Title/Name filter
+      if (criteria.title && criteria.title.trim() !== '') {
+        const searchTerm = criteria.title.toLowerCase().trim();
+        const productTitle = product.title.toLowerCase();
+        if (!productTitle.includes(searchTerm)) {
           return false;
         }
       }
 
-      // Filter by minimum price
-      if (filters.minPrice !== null && filters.minPrice !== undefined && filters.minPrice > 0) {
-        if (product.price < filters.minPrice) {
+      // Min price filter
+      if (criteria.minPrice !== null && criteria.minPrice !== undefined && criteria.minPrice > 0) {
+        if (product.price < criteria.minPrice) {
           return false;
         }
       }
 
-      // Filter by maximum price
-      if (filters.maxPrice !== null && filters.maxPrice !== undefined && filters.maxPrice > 0) {
-        if (product.price > filters.maxPrice) {
+      // Max price filter
+      if (criteria.maxPrice !== null && criteria.maxPrice !== undefined && criteria.maxPrice > 0) {
+        if (product.price > criteria.maxPrice) {
           return false;
         }
       }
 
       return true;
     });
-  }
-
-  private isEmpty(filters: ProductFilterCriteria): boolean {
-    return (
-      (!filters.category || filters.category.trim() === '') &&
-      (!filters.title || filters.title.trim() === '') &&
-      (filters.minPrice === null || filters.minPrice === undefined || filters.minPrice <= 0) &&
-      (filters.maxPrice === null || filters.maxPrice === undefined || filters.maxPrice <= 0)
-    );
   }
 }
