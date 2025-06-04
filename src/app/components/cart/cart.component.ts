@@ -45,7 +45,7 @@ import { RouterModule } from '@angular/router';
                     </div>
 
                     <!-- Product Info -->
-                    <div class="col-md-4 col-sm-9">
+                    <div class="col-md-3 col-sm-9">
                       <h6 class="product-title mb-1">{{ item.product.title }}</h6>
                       <p class="text-muted small mb-1">{{ item.product.brand }}</p>
                       <small class="text-muted">{{ item.product.category }}</small>
@@ -84,7 +84,7 @@ import { RouterModule } from '@angular/router';
                     </div>
 
                     <!-- Total Price -->
-                    <div class="col-md-1 text-center">
+                    <div class="col-md-2 text-center">
                       <strong class="item-total">\${{ (item.product.price * item.quantity).toFixed(2) }}</strong>
                     </div>
 
