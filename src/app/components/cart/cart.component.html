@@ -1,1 +1,344 @@
-<p>cart works!</p>
+<div class="container mt-4">
+  <!-- Cart Header -->
+  <div class="cart-header d-flex justify-content-between align-items-center mb-4">
+    <h2 class="page-title">
+      <i class="fas fa-shopping-cart me-2"></i>
+      Shopping Cart
+      <span *ngIf="cartItems.length > 0" class="badge bg-primary ms-2">
+        {{ getTotalItems() }}
+      </span>
+    </h2>
+    <a routerLink="/products" class="btn btn-outline-primary">
+      <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+    </a>
+  </div>
+
+  <!-- Empty Cart State -->
+  <div *ngIf="cartItems.length === 0" class="empty-cart-container">
+    <div class="empty-cart-content text-center">
+      <div class="empty-cart-icon mb-4">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <h3 class="empty-cart-title">Your cart is empty</h3>
+      <p class="empty-cart-subtitle text-muted mb-4">
+        Discover amazing products and add them to your cart
+      </p>
+      <a routerLink="/products" class="btn btn-primary btn-lg">
+        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+      </a>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <div *ngIf="cartItems.length > 0" class="cart-content">
+    <div class="row">
+      <!-- Cart Items Section -->
+      <div class="col-lg-8">
+        <div class="cart-items-section">
+          <h5 class="section-title mb-3">
+            <i class="fas fa-list me-2"></i>Items in your cart
+          </h5>
+
+          <!-- Cart Item -->
+          <div class="cart-item-card mb-3" *ngFor="let item of cartItems; trackBy: trackByProductId">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                <div class="row align-items-center">
+                  <!-- Product Image -->
+                  <div class="col-md-2 col-4">
+                    <div class="product-image-container">
+                      <img
+                        [src]="item.product.thumbnail"
+                        [alt]="item.product.title"
+                        class="product-image"
+                        (error)="onImageError($event)"
+                        [routerLink]="['/products', item.product.id]">
+
+                      <!-- Discount Badge -->
+                      <div *ngIf="item.product.discountPercentage > 0" class="discount-badge">
+                        -{{ item.product.discountPercentage.toFixed(0) }}%
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Product Details -->
+                  <div class="col-md-3 col-8">
+                    <div class="product-details">
+                      <h6 class="product-title mb-2">
+                        <a [routerLink]="['/products', item.product.id]" class="text-decoration-none">
+                          {{ item.product.title }}
+                        </a>
+                      </h6>
+                      <div class="product-meta">
+                        <span class="badge bg-light text-dark me-2">{{ item.product.category | titlecase }}</span>
+                        <small class="text-muted" *ngIf="item.product.brand">{{ item.product.brand }}</small>
+                      </div>
+                      <div class="stock-info mt-2">
+                        <small [class]="item.product.stock < 10 ? 'text-warning' : 'text-success'">
+                          <i class="fas fa-box me-1"></i>
+                          {{ item.product.stock }} in stock
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Price per Item -->
+                  <div class="col-md-2 col-6 text-center">
+                    <div class="price-info">
+                      <div class="unit-price">${{ item.product.price.toFixed(2) }}</div>
+                      <small class="text-muted">per item</small>
+                    </div>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="col-md-2 col-6">
+                    <div class="quantity-section">
+                      <form [formGroup]="getQuantityForm(item.product.id)">
+                        <div class="quantity-controls">
+                          <button
+                            type="button"
+                            class="quantity-btn"
+                            (click)="decreaseQuantity(item.product.id)"
+                            [disabled]="item.quantity <= 1"
+                            title="Decrease quantity">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                          <input
+                            type="number"
+                            class="quantity-input"
+                            min="1"
+                            [max]="item.product.stock"
+                            formControlName="quantity"
+                            (change)="updateQuantity(item.product.id, $event)"
+                            (blur)="updateQuantity(item.product.id, $event)"
+                            title="Enter quantity">
+                          <button
+                            type="button"
+                            class="quantity-btn"
+                            (click)="increaseQuantity(item.product.id)"
+                            [disabled]="item.quantity >= item.product.stock"
+                            title="Increase quantity">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Item Total -->
+                  <div class="col-md-2 col-6 text-center">
+                    <div class="item-total-price">
+                      ${{ getItemSubtotal(item).toFixed(2) }}
+                    </div>
+                  </div>
+
+                  <!-- Remove Button -->
+                  <div class="col-md-1 col-6 text-center">
+                    <button
+                      class="btn btn-outline-danger btn-sm remove-btn"
+                      (click)="removeItem(item.product.id)"
+                      title="Remove from cart">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary Sidebar -->
+      <div class="col-lg-4">
+        <div class="order-summary-container sticky-top">
+          <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-receipt me-2"></i>Order Summary
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Summary Items -->
+              <div class="summary-section mb-4">
+                <div class="summary-line d-flex justify-content-between mb-2">
+                  <span>Subtotal ({{ getTotalItems() }} items):</span>
+                  <span>${{ getTotalPrice().toFixed(2) }}</span>
+                </div>
+                <div class="summary-line d-flex justify-content-between mb-2">
+                  <span>Shipping:</span>
+                  <span [class]="getShipping() === 0 ? 'text-success' : ''">
+                    {{ getShipping() === 0 ? 'FREE' : '$' + getShipping().toFixed(2) }}
+                  </span>
+                </div>
+                <div class="summary-line d-flex justify-content-between mb-2">
+                  <span>Tax (8%):</span>
+                  <span>${{ getTax().toFixed(2) }}</span>
+                </div>
+
+                <!-- Free Shipping Progress -->
+                <div *ngIf="getShipping() > 0" class="free-shipping-progress mt-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <small class="text-muted">Free shipping at $50</small>
+                    <small class="text-muted">${{ (50 - getTotalPrice()).toFixed(2) }} to go</small>
+                  </div>
+                  <div class="progress" style="height: 4px;">
+                    <div class="progress-bar bg-success"
+                         [style.width.%]="(getTotalPrice() / 50) * 100"></div>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+              <!-- Total -->
+              <div class="total-section mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="mb-0">Total:</h5>
+                  <h4 class="mb-0 text-primary">${{ getFinalTotal().toFixed(2) }}</h4>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="action-buttons">
+                <button
+                  class="btn btn-success btn-lg w-100 mb-3 checkout-btn"
+                  (click)="proceedToCheckout()"
+                  [disabled]="isLoading">
+                  <span *ngIf="!isLoading">
+                    <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
+                  </span>
+                  <span *ngIf="isLoading">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Processing...
+                  </span>
+                </button>
+
+                <button
+                  class="btn btn-outline-danger w-100"
+                  (click)="clearCart()"
+                  [disabled]="isLoading">
+                  <i class="fas fa-trash-alt me-2"></i>Clear Cart
+                </button>
+              </div>
+
+              <!-- Security Badges -->
+              <div class="security-badges mt-4 text-center">
+                <small class="text-muted d-block mb-2">Secure Checkout</small>
+                <div class="badges">
+                  <i class="fab fa-cc-visa text-primary me-2"></i>
+                  <i class="fab fa-cc-mastercard text-warning me-2"></i>
+                  <i class="fab fa-cc-paypal text-info me-2"></i>
+                  <i class="fas fa-lock text-success"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="checkoutModalLabel">
+          <i class="fas fa-check-circle me-2"></i>Order Confirmation
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Success Animation -->
+        <div class="text-center mb-4">
+          <div class="success-animation">
+            <i class="fas fa-check-circle fa-4x text-success mb-3 animate-pulse"></i>
+          </div>
+          <h4 class="text-success">Thank you for your order!</h4>
+          <p class="text-muted">Your order has been successfully placed and will be processed shortly.</p>
+        </div>
+
+        <!-- Order Details -->
+        <div class="order-details">
+          <h6 class="fw-bold mb-3">Order Summary:</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-borderless">
+              <thead class="table-light">
+              <tr>
+                <th>Item</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end">Price</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of cartItems">
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img [src]="item.product.thumbnail" [alt]="item.product.title"
+                         class="me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    <div>
+                      <div class="fw-medium">{{ item.product.title }}</div>
+                      <small class="text-muted">{{ item.product.category }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center align-middle">{{ item.quantity }}</td>
+                <td class="text-end align-middle">${{ getItemSubtotal(item).toFixed(2) }}</td>
+              </tr>
+              </tbody>
+              <tfoot class="table-primary">
+              <tr>
+                <td colspan="2" class="fw-bold">Subtotal:</td>
+                <td class="text-end fw-bold">${{ getTotalPrice().toFixed(2) }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">Shipping:</td>
+                <td class="text-end">{{ getShipping() === 0 ? 'FREE' : '$' + getShipping().toFixed(2) }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">Tax:</td>
+                <td class="text-end">${{ getTax().toFixed(2) }}</td>
+              </tr>
+              <tr class="table-success">
+                <td colspan="2" class="fw-bold">Total:</td>
+                <td class="text-end fw-bold">${{ getFinalTotal().toFixed(2) }}</td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Order Info -->
+        <div class="order-info mt-4 p-3 bg-light rounded">
+          <div class="row">
+            <div class="col-6">
+              <small class="text-muted">Order Number:</small>
+              <div class="fw-bold">#ORD-{{ Date.now() }}</div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Estimated Delivery:</small>
+              <div class="fw-bold">3-5 Business Days</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times me-2"></i>Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="confirmOrder()" [disabled]="isLoading">
+          <span *ngIf="!isLoading">
+            <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+          </span>
+          <span *ngIf="isLoading">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Processing...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
