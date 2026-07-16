@@ -8,7 +8,7 @@
         </a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        {{ product?.title || 'Product Details' }}
+        {{ product?.name || 'Product Details' }}
       </li>
     </ol>
   </nav>
@@ -29,29 +29,29 @@
         <!-- Main Image -->
         <div class="main-image-container mb-3">
           <img
-            [src]="selectedImage || product.thumbnail"
-            [alt]="product.title"
+            [src]="selectedImage || getImageUrl(product)"
+            [alt]="product.name"
             class="main-product-image"
             (error)="onImageError($event)">
 
           <!-- Discount Badge on Image -->
-          <div *ngIf="product.discountPercentage > 0" class="discount-overlay">
+          <div *ngIf="product.discount_percent > 0" class="discount-overlay">
             <span class="discount-badge">
-              -{{ product.discountPercentage.toFixed(0) }}% OFF
+              -{{ product.discount_percent.toFixed(0) }}% OFF
             </span>
           </div>
         </div>
 
         <!-- Thumbnail Images -->
-        <div class="thumbnail-container" *ngIf="product.images.length > 1">
+        <div class="thumbnail-container" *ngIf="product.product_image_galleries.length > 1">          
           <div class="row g-2">
-            <div class="col-3" *ngFor="let image of product.images.slice(0, 4)">
+            <div class="col-3" *ngFor="let image of product.product_image_galleries.slice(0, 4)">
               <img
-                [src]="image"
-                [alt]="product.title"
+                [src]="getImageGalleyUrl(image.image)"
+                [alt]="product.name"
                 class="thumbnail-image"
-                [class.active]="selectedImage === image"
-                (click)="selectImage(image)"
+                [class.active]="selectedImage === (getImageGalleyUrl(image.image))"
+                (click)="selectImage(getImageGalleyUrl(image.image))"
                 (error)="onImageError($event)">
             </div>
           </div>
@@ -64,15 +64,15 @@
       <div class="product-info">
         <!-- Category and Brand -->
         <div class="product-meta mb-3">
-          <span class="badge bg-primary me-2">{{ product.category | titlecase }}</span>
-          <span *ngIf="product.brand" class="text-muted">{{ product.brand }}</span>
+          <span class="badge bg-primary me-2">{{ product.category.name | titlecase }}</span>
+          <!-- <span *ngIf="product.brand" class="text-muted">{{ product.brand }}</span> -->
         </div>
 
         <!-- Product Title -->
-        <h1 class="product-title mb-3">{{ product.title }}</h1>
+        <h1 class="product-title mb-3">{{ product.name }}</h1>
 
         <!-- Rating Section -->
-        <div class="rating-section mb-3">
+        <!-- <div class="rating-section mb-3">
           <div class="d-flex align-items-center">
             <div class="stars me-2">
               <i class="fas fa-star text-warning" *ngFor="let star of getStars(product.rating)"></i>
@@ -80,26 +80,26 @@
             </div>
             <span class="rating-text text-muted">{{ product.rating.toFixed(1) }}/5</span>
           </div>
-        </div>
+        </div> -->
 
         <!-- Price Section -->
         <div class="price-section mb-4">
           <div class="d-flex align-items-baseline mb-2">
             <span class="current-price me-3">${{ product.price.toFixed(2) }}</span>
-            <span *ngIf="product.discountPercentage > 0" class="original-price">
+            <span *ngIf="product.discount_percent > 0" class="original-price">
               ${{ getOriginalPrice() }}
             </span>
           </div>
-          <div *ngIf="product.discountPercentage > 0" class="savings-info">
+          <div *ngIf="product.discount_percent > 0" class="savings-info">
             <small class="text-success">
               <i class="fas fa-tag me-1"></i>
-              You save ${{ getSavings() }} ({{ product.discountPercentage.toFixed(0) }}% off)
+              You save ${{ getSavings() }} ({{ product.discount_percent.toFixed(0) }}% off)
             </small>
           </div>
         </div>
 
         <!-- Stock Status -->
-        <div class="stock-section mb-4">
+        <div class="qty mb-4">
           <div class="d-flex align-items-center">
             <span class="me-2">Availability:</span>
             <span [class]="getStockClass()" class="fw-bold">
@@ -112,7 +112,7 @@
         <!-- Description -->
         <div class="description-section mb-4">
           <h5 class="section-title">Description</h5>
-          <p class="product-description">{{ product.description }}</p>
+          <p class="product-description">{{ product.short_description }}</p>
         </div>
 
         <!-- Quantity and Add to Cart -->
@@ -134,7 +134,7 @@
                   type="button"
                   class="btn btn-outline-secondary btn-sm"
                   (click)="incrementQuantity()"
-                  [disabled]="quantity >= product.stock || product.stock === 0">
+                  [disabled]="quantity >= product.qty || product.qty === 0">
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
@@ -144,10 +144,10 @@
             <div class="col">
               <button
                 class="btn btn-primary btn-lg w-100"
-                [disabled]="product.stock === 0"
+                [disabled]="product.qty === 0"
                 (click)="addToCart()">
                 <i class="fas fa-cart-plus me-2"></i>
-                {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+                {{ product.qty === 0 ? 'Out of qty' : 'Add to Cart' }}
               </button>
             </div>
           </div>
@@ -165,7 +165,7 @@
           <button class="btn btn-outline-secondary" (click)="goBack()">
             <i class="fas fa-arrow-left me-2"></i>Continue Shopping
           </button>
-          <button class="btn btn-outline-primary ms-2" disabled>
+          <button class="btn btn-outline-primary ms-2">
             <i class="fas fa-heart me-2"></i>Add to Wishlist
           </button>
         </div>
@@ -182,11 +182,11 @@
             <div class="col-6">
               <div class="info-item">
                 <i class="fas fa-undo text-muted me-2"></i>
-                <small>30-day return policy</small>
+                <small>10-day return policy</small>
               </div>
             </div>
           </div>
-        </div>
+        </div>  
       </div>
     </div>
   </div>

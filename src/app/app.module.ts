@@ -11,6 +11,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ProductFilterPipe } from './pipes/product-filter-pipe';
 
 import { appRoutes } from './app.routes';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { appRoutes } from './app.routes';
     NavbarComponent,
     ProductsComponent,
     FooterComponent,
-    ProductFilterPipe
+    ProductFilterPipe,
+    WishlistComponent,
   ],
   imports: [
     BrowserModule,

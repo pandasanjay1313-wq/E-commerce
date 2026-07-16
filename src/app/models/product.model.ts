@@ -1,18 +1,26 @@
 export interface Product {
   id: number;
-  title: string;
-  description: string;
+  name: string;
+  slug: string;
+  short_description: string;
+  long_description: string;
   price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
+  offer_price: number;
+  discount_percent: number;
+  qty: number;
+   category: {
+    id: number;
+    name: string;
+  };
+  thumb_image: string;
+  product_image_galleries: {
+    id: number;
+    image: string;
+  }[];
+  brand_id: number;
 }
 
 export interface CartItem {
   product: Product;
-  quantity: number;
+  qty: number;
 }

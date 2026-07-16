@@ -15,19 +15,34 @@ export interface ProductsResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'https://dummyjson.com';
+  private baseUrl = 'http://192.168.10.33:8000/api/v1';
 
   constructor(private http: HttpClient) {}
+getProducts(): Observable<Product[]> {
 
-  getProducts(): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${this.baseUrl}/products?limit=0`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  return this.http.get<any>(this.baseUrl + `/products`)
+    .pipe(
+      map(res => {
+        // console.log('Full Response:', res);
+        // console.log('Products:', res.products.data);
+        return res.products.data;
+      }),
+      catchError(this.handleError)
+    );
+}
+  // getProducts(): Observable<Product[]> {
 
-  getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/products/${id}`)
+  //   return this.http.get<any>(this.baseUrl+`/products`)
+  //     .pipe(
+  //       map(res=> res.products.data),
+  //       catchError(this.handleError)
+  //     );
+  // }
+
+  getProductById(slug: any): Observable<any> {
+    // console.log("called the get Product by slug");
+    
+    return this.http.get<any>(`${this.baseUrl}/products/${slug}`)
       .pipe(
         catchError(this.handleError)
       );
@@ -76,11 +91,20 @@ export class ProductService {
 
   searchProducts(query: string): Observable<ProductsResponse> {
     return this.http.get<ProductsResponse>(`${this.baseUrl}/products/search?q=${encodeURIComponent(query)}`)
-      .pipe(
+      .pipe( 
         catchError(this.handleError)
       );
   }
 
+  addProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(
+       `${this.baseUrl}/products`,
+    product
+    )
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
   private handleError(error: HttpErrorResponse) {
     console.error('API Error:', error);
     return throwError(() => error);

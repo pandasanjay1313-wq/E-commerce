@@ -2,8 +2,11 @@
 import { Product } from './product.model';
 
 export interface CartItem {
+  id: number;
+  product_id: number;
+  price: string;
   product: Product;
-  quantity: number;
+  qty: number;
 }
 
 export interface OrderSummary {

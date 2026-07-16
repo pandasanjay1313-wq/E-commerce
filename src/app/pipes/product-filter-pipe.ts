@@ -22,7 +22,7 @@ export class ProductFilterPipe implements PipeTransform {
     return products.filter(product => {
       // Category filter
       if (criteria.category && criteria.category.trim() !== '') {
-        if (product.category.toLowerCase() !== criteria.category.toLowerCase()) {
+        if (product.category.name.toLowerCase() !== criteria.category.toLowerCase()) {
           return false;
         }
       }
@@ -30,7 +30,7 @@ export class ProductFilterPipe implements PipeTransform {
       // Title/Name filter
       if (criteria.title && criteria.title.trim() !== '') {
         const searchTerm = criteria.title.toLowerCase().trim();
-        const productTitle = product.title.toLowerCase();
+        const productTitle = product.name.toLowerCase();
         if (!productTitle.includes(searchTerm)) {
           return false;
         }

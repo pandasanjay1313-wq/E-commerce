@@ -12,7 +12,7 @@ declare var bootstrap: any;
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
   cartItems: CartItem[] = [];
@@ -21,25 +21,52 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
+      this.cartService.getCart().subscribe({
+    next: (res) => {
+      this.cartItems = res.cart_items;
+    }
+  });
+
+  // this.cartService.getCart().subscribe({
+  //   next: (res) => {
+  //     console.log('Cart Response:', res);
+  //   },
+  //   error: (err) => {
+  //     console.log('Cart Error:', err);
+  //   }
+  // });
     this.loadCartItems();
+    // console.log(this.cartItems);
   }
 
   private loadCartItems(): void {
-    this.cartService.cart$.subscribe(items => {
-      this.cartItems = items;
-      this.initQuantityForms();
-    });
+   this.cartService.getCart().subscribe({
+    next: (res) => {
+      // console.log('Cart Response:',res);
+      
+      this.cartItems = res.cart_items;
+      console.log("Test Cart" + this.cartItems);
+      
+      //  this.initQuantityForms();
+      // console.log(this.cartItems);
+     
+    },
+    error: (err) => {
+      alert('Unable to load cart')
+      // console.log(err);
+    }
+  });
   }
 
   private initQuantityForms(): void {
     this.quantityForms = {};
-    this.cartItems.forEach(item => {
+    this.cartItems.forEach((item) => {
       this.quantityForms[item.product.id] = this.fb.group({
-        quantity: [item.quantity, { validators: [] }]
+        quantity: [item.qty, { validators: [] }],
       });
     });
   }
@@ -47,7 +74,7 @@ export class CartComponent implements OnInit {
   getQuantityForm(productId: number): FormGroup {
     if (!this.quantityForms[productId]) {
       this.quantityForms[productId] = this.fb.group({
-        quantity: [1]
+        quantity: [1],
       });
     }
     return this.quantityForms[productId];
@@ -59,9 +86,13 @@ export class CartComponent implements OnInit {
       this.cartService.updateQuantity(productId, quantity);
     } else {
       // Reset to current quantity if invalid
-      const currentItem = this.cartItems.find(item => item.product.id === productId);
+      const currentItem = this.cartItems.find(
+        (item) => item.product.id === productId,
+      );
       if (currentItem) {
-        this.getQuantityForm(productId).patchValue({ quantity: currentItem.quantity });
+        this.getQuantityForm(productId).patchValue({
+          quantity: currentItem.qty,
+        });
       }
     }
   }
@@ -89,16 +120,35 @@ export class CartComponent implements OnInit {
     }
   }
 
+  orderNumber = Date.now();
+
   removeItem(productId: number): void {
     const item = this.cartItems.find(item => item.product.id === productId);
-    if (item && confirm(`Remove "${item.product.title}" from your cart?`)) {
-      this.cartService.removeFromCart(productId);
-      this.showNotification(`${item.product.title} removed from cart`, 'warning');
+    if (item && confirm(`Remove "${item.product.name}" from your cart?`)) {
+      this.cartService.removeFromCart(productId).subscribe({
+        next :(res)=> { this.cartItems = this.cartItems.filter(
+          item => item.product.id !== productId
+        );
+        this.showNotification(
+          `${item.product.name} removed from cart`,'success');
+      },
+       error: (err) => {
+        console.log(err);
+        this.showNotification( 'Unable to remove product','danger');
+      }
+      })
+      // this.showNotification(
+      //   `${item.product.name} removed from cart`,
+      //   'warning',
+      // );
     }
   }
 
   clearCart(): void {
-    if (this.cartItems.length > 0 && confirm('Are you sure you want to clear your entire cart?')) {
+    if (
+      this.cartItems.length > 0 &&
+      confirm('Are you sure you want to clear your entire cart?')
+    ) {
       this.cartService.clearCart();
       this.showNotification('Cart cleared successfully', 'info');
     }
@@ -149,17 +199,24 @@ export class CartComponent implements OnInit {
       this.isLoading = false;
       this.showNotification(
         `Order placed successfully! ${itemCount} items, Total: $${orderTotal.toFixed(2)}`,
-        'success'
+        'success',
       );
     }, 1500);
   }
 
   private fallbackCheckout(): void {
-    const orderSummary = this.cartItems.map(item =>
-      `${item.quantity}x ${item.product.title} - $${(item.product.price * item.quantity).toFixed(2)}`
-    ).join('\n');
+    const orderSummary = this.cartItems
+      .map(
+        (item) =>
+          `${item.qty}x ${item.product.name} - $${(item.product.price * item.qty).toFixed(2)}`,
+      )
+      .join('\n');
 
-    if (confirm(`Order Summary:\n${orderSummary}\n\nTotal: $${this.getFinalTotal().toFixed(2)}\n\nProceed with order?`)) {
+    if (
+      confirm(
+        `Order Summary:\n${orderSummary}\n\nTotal: $${this.getFinalTotal().toFixed(2)}\n\nProceed with order?`,
+      )
+    ) {
       this.cartService.clearCart();
       this.showNotification('Order placed successfully!', 'success');
     }
@@ -167,11 +224,13 @@ export class CartComponent implements OnInit {
 
   // Utility Methods
   getTotalItems(): number {
-    return this.cartService.getCartCount();
+      return this.cartItems.reduce((total, item) => total + item.qty, 0);
+    // return this.cartService.getCartCount();
   }
 
   getTotalPrice(): number {
-    return this.cartService.getCartTotal();
+      return this.cartItems.reduce((total, item) =>total + (item.product.price * item.qty), 0);
+    // return this.cartService.getCartTotal();
   }
 
   getTax(): number {
@@ -187,23 +246,30 @@ export class CartComponent implements OnInit {
   }
 
   getMaxStock(productId: number): number {
-    const item = this.cartItems.find(item => item.product.id === productId);
-    return item?.product.stock || 1;
+    const item = this.cartItems.find((item) => item.product.id === productId);
+    return item?.product.qty || 1;
   }
 
   getItemSubtotal(item: CartItem): number {
-    return item.product.price * item.quantity;
+    return item.product.price * item.qty;
   }
-
+  imgurl(image :any) {
+    return 'http://192.168.10.33:8000/' + image;
+  }
+  
   onImageError(event: any): void {
     event.target.src = '/assets/images/placeholder.jpg';
+    // console.log(this.cartItems);
   }
 
   trackByProductId(index: number, item: CartItem): number {
     return item.product.id;
   }
 
-  private showNotification(message: string, type: 'success' | 'warning' | 'info' | 'danger'): void {
+  private showNotification(
+    message: string,
+    type: 'success' | 'warning' | 'info' | 'danger',
+  ): void {
     const notification = document.createElement('div');
     notification.className = `alert alert-${type} position-fixed notification-toast`;
     notification.style.top = '20px';
@@ -233,11 +299,16 @@ export class CartComponent implements OnInit {
 
   private getIconForType(type: string): string {
     switch (type) {
-      case 'success': return 'check-circle';
-      case 'warning': return 'exclamation-triangle';
-      case 'info': return 'info-circle';
-      case 'danger': return 'times-circle';
-      default: return 'info-circle';
+      case 'success':
+        return 'check-circle';
+      case 'warning':
+        return 'exclamation-triangle';
+      case 'info':
+        return 'info-circle';
+      case 'danger':
+        return 'times-circle';
+      default:
+        return 'info-circle';
     }
   }
 

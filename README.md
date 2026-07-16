@@ -14,7 +14,7 @@ A modern e-commerce product showcase application built with Angular 20 and Boots
 
 - **Product Showcase**: Display products with images, prices, stock levels, and categories
 - **Responsive Design**: Mobile-first design using Bootstrap 5
-- **Product Filtering**: Filter products by category, title, and price range
+- **Product Filtering**: Filter products by category,name, and price range
 - **Modern UI**: Clean and intuitive user interface with Font Awesome icons
 - **Stock Management**: Visual indicators for stock levels (low, medium, high)
 - **Image Handling**: Fallback images for missing product images

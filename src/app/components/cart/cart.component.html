@@ -48,15 +48,15 @@
                   <div class="col-md-2 col-4">
                     <div class="product-image-container">
                       <img
-                        [src]="item.product.thumbnail"
-                        [alt]="item.product.title"
+                        [src]="imgurl(item.product.thumb_image)"
+                        [alt]="item.product.name"
                         class="product-image"
                         (error)="onImageError($event)"
                         [routerLink]="['/products', item.product.id]">
 
                       <!-- Discount Badge -->
-                      <div *ngIf="item.product.discountPercentage > 0" class="discount-badge">
-                        -{{ item.product.discountPercentage.toFixed(0) }}%
+                      <div *ngIf="item.product.discount_percent > 0" class="discount-badge">
+                        -{{ item.product.discount_percent.toFixed(0) }}%
                       </div>
                     </div>
                   </div>
@@ -65,18 +65,18 @@
                   <div class="col-md-3 col-8">
                     <div class="product-details">
                       <h6 class="product-title mb-2">
-                        <a [routerLink]="['/products', item.product.id]" class="text-decoration-none">
-                          {{ item.product.title }}
+                        <a [routerLink]="['/products', item.product.slug]" class="text-decoration-none">
+                          {{ item.product.name }}
                         </a>
                       </h6>
                       <div class="product-meta">
-                        <span class="badge bg-light text-dark me-2">{{ item.product.category | titlecase }}</span>
-                        <small class="text-muted" *ngIf="item.product.brand">{{ item.product.brand }}</small>
+                        <!-- <span class="badge bg-light text-dark me-2">{{ item.product.category.name | titlecase }}</span> -->
+                        <!-- <small class="text-muted" *ngIf="item.product.brand">{{ item.product.brand }}</small> -->
                       </div>
-                      <div class="stock-info mt-2">
-                        <small [class]="item.product.stock < 10 ? 'text-warning' : 'text-success'">
+                      <div class="qty-info mt-2">
+                        <small [class]="item.product.qty < 10 ? 'text-warning' : 'text-success'">
                           <i class="fas fa-box me-1"></i>
-                          {{ item.product.stock }} in stock
+                          {{ item.product.qty }} in qty
                         </small>
                       </div>
                     </div>
@@ -99,7 +99,7 @@
                             type="button"
                             class="quantity-btn"
                             (click)="decreaseQuantity(item.product.id)"
-                            [disabled]="item.quantity <= 1"
+                            [disabled]="item.qty <= 1"
                             title="Decrease quantity">
                             <i class="fas fa-minus"></i>
                           </button>
@@ -107,7 +107,7 @@
                             type="number"
                             class="quantity-input"
                             min="1"
-                            [max]="item.product.stock"
+                            [max]="item.product.qty"
                             formControlName="quantity"
                             (change)="updateQuantity(item.product.id, $event)"
                             (blur)="updateQuantity(item.product.id, $event)"
@@ -116,7 +116,7 @@
                             type="button"
                             class="quantity-btn"
                             (click)="increaseQuantity(item.product.id)"
-                            [disabled]="item.quantity >= item.product.stock"
+                            [disabled]="item.qty >= item.product.qty"
                             title="Increase quantity">
                             <i class="fas fa-plus"></i>
                           </button>
@@ -276,15 +276,15 @@
               <tr *ngFor="let item of cartItems">
                 <td>
                   <div class="d-flex align-items-center">
-                    <img [src]="item.product.thumbnail" [alt]="item.product.title"
+                    <img [src]="item.product.thumb_image" [alt]="item.product.name"
                          class="me-2" style="width: 40px; height: 40px; object-fit: cover;">
                     <div>
-                      <div class="fw-medium">{{ item.product.title }}</div>
-                      <small class="text-muted">{{ item.product.category }}</small>
+                      <div class="fw-medium">{{ item.product.name }}</div>
+                      <small class="text-muted">{{ item.product.category.name || 'Test' }}</small>
                     </div>
                   </div>
                 </td>
-                <td class="text-center align-middle">{{ item.quantity }}</td>
+                <td class="text-center align-middle">{{ item.qty }}</td>
                 <td class="text-end align-middle">${{ getItemSubtotal(item).toFixed(2) }}</td>
               </tr>
               </tbody>
@@ -315,7 +315,7 @@
           <div class="row">
             <div class="col-6">
               <small class="text-muted">Order Number:</small>
-              <div class="fw-bold">#ORD-{{ Date.now() }}</div>
+              <div class="fw-bold">#ORD-{{ orderNumber }}</div>
             </div>
             <div class="col-6">
               <small class="text-muted">Estimated Delivery:</small>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Product, CartItem } from '../models/product.model';
-
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,32 +10,36 @@ export class CartService {
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
   public cart$ = this.cartSubject.asObservable();
 
-  constructor() {
-    this.loadCartFromStorage();
+private baseurl = 'http://192.168.10.33:8000/api/v1/cart';
+
+  constructor(private http: HttpClient) {
+    // this.loadCartFromStorage(); 
+  }
+  getCart(): Observable<any> {
+    return this.http.get<any>(this.baseurl);
+    // console.log("this.baseurl");
   }
 
-  addToCart(product: Product, quantity: number = 1): void {
-    const existingItem = this.cartItems.find(item => item.product.id === product.id);
-
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      this.cartItems.push({ product, quantity });
-    }
-
-    this.updateCart();
+  addToCart(productId: number, qty: number = 1): Observable<any> {
+    return this.http.post<any>(`${this.baseurl}/add`,{
+      product_id:productId,
+      qty:qty,
+    })
   }
 
-  removeFromCart(productId: number): void {
-    this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
-    this.updateCart();
+  removeFromCart(productId: number) {
+     return this.http.delete(
+    `${this.baseurl}/cart/${productId}`
+  );
+    // this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
+    // this.updateCart();
   }
 
   updateQuantity(productId: number, quantity: number): void {
     const item = this.cartItems.find(item => item.product.id === productId);
     if (item) {
-      item.quantity = quantity;
-      if (item.quantity <= 0) {
+      item.qty = quantity;
+      if (item.qty <= 0) {
         this.removeFromCart(productId);
       } else {
         this.updateCart();
@@ -53,11 +57,11 @@ export class CartService {
   }
 
   getCartCount(): number {
-    return this.cartItems.reduce((count, item) => count + item.quantity, 0);
+    return this.cartItems.reduce((count, item) => count + item.qty, 0);
   }
 
   getCartTotal(): number {
-    return this.cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    return this.cartItems.reduce((total, item) => total + (item.product.price * item.qty), 0);
   }
 
   private updateCart(): void {

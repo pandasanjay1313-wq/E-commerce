@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../models/product.model';
@@ -12,7 +11,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css']
+  styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;
@@ -24,30 +23,34 @@ export class ProductDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = Number(params['id']);
+    this.route.params.subscribe((params) => {
+      const id = params['slug'];
       if (id) {
         this.loadProduct(id);
       }
     });
   }
 
-  loadProduct(id: number): void {
+  loadProduct(id: any): void {
     this.loading = true;
     this.productService.getProductById(id).subscribe({
-      next: (product) => {
-        this.product = product;
-        this.selectedImage = product.thumbnail;
+      next: (res) => {
+        // console.log(res);
+        
+        this.product = res.product;
+        // console.log(this.product);
+        
+        this.selectedImage = this.getImageUrl(res.product);
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading product:', error);
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -56,7 +59,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   incrementQuantity(): void {
-    if (this.product && this.quantity < this.product.stock) {
+    if (this.product && this.quantity < this.product.qty) {
       this.quantity++;
     }
   }
@@ -70,7 +73,7 @@ export class ProductDetailsComponent implements OnInit {
   addToCart(): void {
     if (this.product) {
       for (let i = 0; i < this.quantity; i++) {
-        this.cartService.addToCart(this.product);
+        this.cartService.addToCart(this.product.id);
       }
       this.showSuccessMessage();
     }
@@ -84,7 +87,7 @@ export class ProductDetailsComponent implements OnInit {
     message.style.zIndex = '9999';
     message.innerHTML = `
       <i class="fas fa-check-circle"></i>
-      ${this.quantity} x ${this.product?.title} added to cart!
+      ${this.quantity} x ${this.product?.name} added to cart!
     `;
     document.body.appendChild(message);
 
@@ -108,15 +111,16 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getOriginalPrice(): string {
-    if (this.product && this.product.discountPercentage > 0) {
-      const originalPrice = this.product.price / (1 - this.product.discountPercentage / 100);
+    if (this.product && this.product.discount_percent > 0) {
+      const originalPrice =
+        this.product.price / (1 - this.product.discount_percent / 100);
       return originalPrice.toFixed(2);
     }
     return this.product?.price.toFixed(2) || '0.00';
   }
 
   getSavings(): string {
-    if (this.product && this.product.discountPercentage > 0) {
+    if (this.product && this.product.discount_percent > 0) {
       const originalPrice = parseFloat(this.getOriginalPrice());
       const savings = originalPrice - this.product.price;
       return savings.toFixed(2);
@@ -126,25 +130,34 @@ export class ProductDetailsComponent implements OnInit {
 
   getStockClass(): string {
     if (!this.product) return '';
-    if (this.product.stock === 0) return 'text-danger';
-    if (this.product.stock < 10) return 'text-warning';
+    if (this.product.qty === 0) return 'text-danger';
+    if (this.product.qty < 10) return 'text-warning';
     return 'text-success';
   }
 
   getStockIcon(): string {
     if (!this.product) return '';
-    if (this.product.stock === 0) return 'fas fa-times-circle';
-    if (this.product.stock < 10) return 'fas fa-exclamation-triangle';
+    if (this.product.qty === 0) return 'fas fa-times-circle';
+    if (this.product.qty < 10) return 'fas fa-exclamation-triangle';
     return 'fas fa-check-circle';
   }
 
   getStockText(): string {
     if (!this.product) return '';
-    if (this.product.stock === 0) return 'Out of Stock';
-    if (this.product.stock < 10) return `Only ${this.product.stock} left`;
+    if (this.product.qty === 0) return 'Out of Stock';
+    if (this.product.qty < 10) return `Only ${this.product.qty} left`;
     return 'In Stock';
   }
-
+  getImageUrl(product: Product): string {
+    
+    return 'http://192.168.10.33:8000/' + product.thumb_image;
+  }
+  getImageGalleyUrl(image: any): string {
+    // console.log("http://192.168.10.33:8000/"+ image);
+    
+    return 'http://192.168.10.33:8000/' + image;
+  }
+  
   onImageError(event: any): void {
     event.target.src = '/assets/images/placeholder.jpg';
   }
