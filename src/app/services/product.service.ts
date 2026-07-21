@@ -15,7 +15,7 @@ export interface ProductsResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'http://192.168.10.33:8000/api/v1';
+  private baseUrl = 'http://192.168.10.35:8000/api/v1';
 
   constructor(private http: HttpClient) {}
 getProducts(): Observable<Product[]> {

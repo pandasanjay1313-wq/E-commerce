@@ -12,6 +12,8 @@ import { ProductFilterPipe } from './pipes/product-filter-pipe';
 
 import { appRoutes } from './app.routes';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { LoginComponent } from './page/login/login.component';
+import { LoginHistoryComponent } from './login-history/login-history.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
     FooterComponent,
     ProductFilterPipe,
     WishlistComponent,
+    LoginHistoryComponent,
+  
   ],
   imports: [
     BrowserModule,

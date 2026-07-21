@@ -10,11 +10,13 @@ export class CartService {
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
   public cart$ = this.cartSubject.asObservable();
 
-private baseurl = 'http://192.168.10.33:8000/api/v1/cart';
+private baseurl = 'http://192.168.10.35:8000/api/v1/cart';
 
   constructor(private http: HttpClient) {
-    // this.loadCartFromStorage(); 
-  }
+        this.loadCartFromStorage(); 
+
+   }
+
   getCart(): Observable<any> {
     return this.http.get<any>(this.baseurl);
     // console.log("this.baseurl");
@@ -27,24 +29,19 @@ private baseurl = 'http://192.168.10.33:8000/api/v1/cart';
     })
   }
 
-  removeFromCart(productId: number) {
-     return this.http.delete(
-    `${this.baseurl}/cart/${productId}`
-  );
-    // this.cartItems = this.cartItems.filter(item => item.product.id !== productId);
+  removeFromCart(id: number) {
+     return this.http.delete (`${this.baseurl}/${id}`);
+    // this.cartItems = this.cartItems.filter(item => item.product.id !== id);
     // this.updateCart();
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    const item = this.cartItems.find(item => item.product.id === productId);
-    if (item) {
-      item.qty = quantity;
-      if (item.qty <= 0) {
-        this.removeFromCart(productId);
-      } else {
-        this.updateCart();
-      }
-    }
+  updateQuantity(cartId: number, qty: number): Observable<any> { 
+    return this.http.put(`${this.baseurl}/update-qty`,{
+      cart_id : cartId,
+      qty: qty,
+    });
+   
+    
   }
 
   clearCart(): void {
@@ -57,11 +54,11 @@ private baseurl = 'http://192.168.10.33:8000/api/v1/cart';
   }
 
   getCartCount(): number {
-    return this.cartItems.reduce((count, item) => count + item.qty, 0);
+    return this.cartItems.reduce((count, item) => count + item.qty,1);
   }
 
   getCartTotal(): number {
-    return this.cartItems.reduce((total, item) => total + (item.product.price * item.qty), 0);
+    return this.cartItems.reduce((total, item) => total + (item.product.price * item.qty), 1);
   }
 
   private updateCart(): void {

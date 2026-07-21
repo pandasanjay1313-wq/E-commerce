@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart.model';
+import { debounceTime } from 'rxjs';
 
 declare var bootstrap: any;
 
@@ -46,12 +47,11 @@ export class CartComponent implements OnInit {
   private loadCartItems(): void {
    this.cartService.getCart().subscribe({
     next: (res) => {
-      // console.log('Cart Response:',res);
       
       this.cartItems = res.cart_items;
       console.log("Test Cart" + this.cartItems);
       
-      //  this.initQuantityForms();
+       this.initQuantityForms();
       // console.log(this.cartItems);
      
     },
@@ -81,67 +81,67 @@ export class CartComponent implements OnInit {
   }
 
   updateQuantity(productId: number, event: any): void {
-    const quantity = parseInt(event.target.value);
-    if (quantity > 0 && quantity <= this.getMaxStock(productId)) {
-      this.cartService.updateQuantity(productId, quantity);
-    } else {
-      // Reset to current quantity if invalid
-      const currentItem = this.cartItems.find(
-        (item) => item.product.id === productId,
-      );
-      if (currentItem) {
-        this.getQuantityForm(productId).patchValue({
-          quantity: currentItem.qty,
-        });
-      }
-    }
+    const quantity = Number(event.target.value);
+    const item = this.cartItems.find(x => x.product.id === productId);
+
+if (item) {
+  
+   this.cartService.updateQuantity(item.id, quantity).pipe(
+    debounceTime(500)
+   )
+   .subscribe({
+      next: () => {item.qty = quantity},
+      error: () => {}
+    });
+  
+}
+  
   }
 
   increaseQuantity(productId: number): void {
-    const currentForm = this.getQuantityForm(productId);
-    const currentQuantity = currentForm.get('quantity')?.value || 0;
-    const maxStock = this.getMaxStock(productId);
+  const item = this.cartItems.find(x => x.product.id === productId);
 
-    if (currentQuantity < maxStock) {
-      const newQuantity = currentQuantity + 1;
-      currentForm.patchValue({ quantity: newQuantity });
-      this.cartService.updateQuantity(productId, newQuantity);
+  if (!item) return;
+
+  const newQty = item.qty + 1;
+
+  this.cartService.updateQuantity(item.id, newQty).subscribe({
+    next: () => {
+      item.qty = newQty;
     }
+  });
+    console.log(item.id);
+console.log(item.product.id);
   }
 
   decreaseQuantity(productId: number): void {
-    const currentForm = this.getQuantityForm(productId);
-    const currentQuantity = currentForm.get('quantity')?.value || 0;
+    const item = this.cartItems.find(x => x.product.id === productId);
 
-    if (currentQuantity > 1) {
-      const newQuantity = currentQuantity - 1;
-      currentForm.patchValue({ quantity: newQuantity });
-      this.cartService.updateQuantity(productId, newQuantity);
+  if (!item || item.qty <= 1) return;
+
+  const newQty = item.qty - 1;
+
+  this.cartService.updateQuantity(item.id, newQty).subscribe({
+    next: () => {
+      item.qty = newQty;
     }
-  }
+  });
+}
 
   orderNumber = Date.now();
 
   removeItem(productId: number): void {
-    const item = this.cartItems.find(item => item.product.id === productId);
-    if (item && confirm(`Remove "${item.product.name}" from your cart?`)) {
-      this.cartService.removeFromCart(productId).subscribe({
-        next :(res)=> { this.cartItems = this.cartItems.filter(
-          item => item.product.id !== productId
-        );
-        this.showNotification(
-          `${item.product.name} removed from cart`,'success');
-      },
-       error: (err) => {
+    this.cartService.removeFromCart(productId).subscribe({
+      next: () => {
+         this.loadCartItems();
+        // this.cartItems = this.cartItems.filter(
+        //   item => item.product.id !==productId
+        // );
+      },  
+      error: (err) => {
         console.log(err);
-        this.showNotification( 'Unable to remove product','danger');
       }
-      })
-      // this.showNotification(
-      //   `${item.product.name} removed from cart`,
-      //   'warning',
-      // );
-    }
+    });
   }
 
   clearCart(): void {
@@ -254,7 +254,7 @@ export class CartComponent implements OnInit {
     return item.product.price * item.qty;
   }
   imgurl(image :any) {
-    return 'http://192.168.10.33:8000/' + image;
+    return 'http://192.168.10.35:8000/' + image;
   }
   
   onImageError(event: any): void {

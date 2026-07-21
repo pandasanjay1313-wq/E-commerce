@@ -205,7 +205,7 @@ export class ProductsComponent implements OnInit {
   getImageUrl(product: Product): string {
   //    console.log(product);
   // console.log(product.thumb_image);
-    return 'http://192.168.10.33:8000/'+ product.thumb_image;
+    return 'http://192.168.10.35:8000/'+ product.thumb_image;
   }
 
   onImageError(event: any, product: Product): void {
