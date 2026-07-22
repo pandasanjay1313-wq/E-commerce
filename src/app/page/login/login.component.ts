@@ -37,12 +37,12 @@ loginForm: FormGroup;
     next: (res) => {
       console.log(res);
 
-      this.userService.currentUser.next(res.user.name);
       // this.userService.currentUser.next(res.user.name);
-
+      this.userService.currentUser.next(res.user.name);
+      
       this.userService.isLoggedIn.next(true);
 
-      this.userService.loginHistory$.next(`${email}-login Success`);
+      // this.userService.loginHistory$.next(`${email}-login Success`);
 
       this.router.navigate(['/products']);
 

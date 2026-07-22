@@ -5,7 +5,7 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { WishlistService } from '../../services/wishlist.service';
 @Component({
   selector: 'app-product-details',
   standalone: true,
@@ -24,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private cartService: CartService,
+     private wishlistService: WishlistService,
   ) {}
 
   ngOnInit(): void {
@@ -160,5 +161,24 @@ export class ProductDetailsComponent implements OnInit {
   
   onImageError(event: any): void {
     event.target.src = '/assets/images/placeholder.jpg';
+  }
+
+  addToWishlist(){
+    if (this.product){
+      console.log(this.product);
+    this.wishlistService.addToWishlist(this.product.id).subscribe({
+       next: (res) => {
+
+      alert(res.message);
+
+    },
+
+    error: (err) => {
+
+      alert(err.error.message);
+
+    }
+    });
+  }
   }
 }

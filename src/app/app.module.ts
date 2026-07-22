@@ -11,7 +11,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ProductFilterPipe } from './pipes/product-filter-pipe';
 
 import { appRoutes } from './app.routes';
-import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { WishlistComponent } from './page/wishlist/wishlist.component';
 import { LoginComponent } from './page/login/login.component';
 import { LoginHistoryComponent } from './login-history/login-history.component';
 
@@ -22,7 +22,6 @@ import { LoginHistoryComponent } from './login-history/login-history.component';
     ProductsComponent,
     FooterComponent,
     ProductFilterPipe,
-    WishlistComponent,
     LoginHistoryComponent,
   
   ],

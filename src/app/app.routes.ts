@@ -22,7 +22,7 @@ export const appRoutes: Routes = [
   },
   {
     path: 'wishlist',
-    loadComponent: () => import('./components/wishlist/wishlist.component').then(m => m.WishlistComponent)
+    loadComponent: () => import('./page/wishlist/wishlist.component').then(m => m.WishlistComponent)
   },
 
   { path: '**', redirectTo: '/login' }

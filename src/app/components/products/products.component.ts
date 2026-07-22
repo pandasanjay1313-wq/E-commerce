@@ -4,6 +4,7 @@ import { ProductFilterCriteria } from '../../pipes/product-filter-pipe';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
+import { WishlistService } from '../../services/wishlist.service';
 
 @Component({
   selector: 'app-products',
@@ -35,7 +36,8 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +105,19 @@ export class ProductsComponent implements OnInit {
       this.categories = Array.from(categorySet).sort();
       console.log('Extracted categories:', this.categories);
     }
+  }
+
+  addToWishlist(product: Product){
+    this.wishlistService.addToWishlist(product.id)
+    .subscribe({
+      next:(res)=>{
+        alert(res.message);
+      },
+
+      error:(err)=>{
+        alert(err.error.message);
+      }
+    });
   }
 
   // updateFilters(): void {

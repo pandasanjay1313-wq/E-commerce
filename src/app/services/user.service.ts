@@ -4,14 +4,16 @@ import { LoginResponse } from '../models/login.model';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { RegisterResponse } from '../models/register.model';
 import { ReplaySubject } from 'rxjs';
+import { LogoutResponse } from '../models/logout.model';
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
 	private baseurl = 'http://192.168.10.35:8000/api/v1';
 	//subject
-	currentUser = new Subject<string>();
-	// currentUser = new BehaviorSubject<string>("");//behavior
+	// currentUser = new Subject<string>();
+	
+	currentUser = new BehaviorSubject<string>("");//behavior
 
 	//behavior Subject
 
@@ -31,6 +33,8 @@ export class UserService {
 		return this.http.post<RegisterResponse>(
 			`${this.baseurl}/register`,{name, email, password, password_confirmation});
 	}
-
+	logout(){
+		return this.http.post<LogoutResponse>(`${this.baseurl}/logout`, {})
+	}
 
 }

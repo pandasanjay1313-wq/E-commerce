@@ -1,0 +1,37 @@
+<div class="container mt-4">
+
+  <h3>Wishlist</h3>
+
+  <div class="card mb-3" *ngFor="let item of wishlist">
+
+    <div class="row g-0">
+
+      <div class="col-md-3">
+        <img
+          [src]="getwishUrl(item.product.thumb_image)"
+          style="width:150px;height:150px;object-fit:cover;"
+          class="img-fluid"
+          alt="{{item.product.name}}">
+      </div>
+
+      <div class="col-md-9">
+        <div class="card-body">
+
+          <h5>{{ item.product.name }}</h5>
+
+          <p>$ {{ item.product.offer_price }}</p>
+
+          <button
+            class="btn btn-danger"
+            (click)="remove(item.id)">
+            Remove
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

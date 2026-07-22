@@ -3,6 +3,7 @@ import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -12,7 +13,7 @@ import { UserService } from '../../services/user.service';
 export class NavbarComponent implements OnInit {
   cartCount$: Observable<number>;
 
-  constructor(private cartService: CartService, private userService: UserService) {
+  constructor(private cartService: CartService, private userService: UserService, private router: Router) {
     this.cartCount$ = this.cartService.cart$.pipe(
       map(items => this.cartService.getCartCount())
     );
@@ -35,7 +36,28 @@ isLoggedIn = false;
 
   }
 logout(){
-  this.userService.isLoggedIn.next(false);
+this.userService.logout().subscribe({
+
+    next:(res)=>{
+
+      alert(res.message);
+
+      this.userService.currentUser.next('');
+
+      this.userService.isLoggedIn.next(false);
+
+      this.router.navigate(['/login']);
+
+    },
+
+    error:(err)=>{
+
+      alert(err.error.message);
+
+    }
+
+  });
+
 }
 
 }
