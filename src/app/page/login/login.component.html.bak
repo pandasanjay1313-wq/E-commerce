@@ -5,16 +5,13 @@
     <h3 class="text-center mb-4">Login</h3>
 
     <form [formGroup]="loginForm">
-      <div>
+
       <div class="mb-3">
         <label class="form-label">Email</label>
         <input
           type="email"
           class="form-control"
           formControlName="email">
-          <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" class="text-danger">
-           Email is required
-          </div>
       </div>
 
       <div class="mb-3">
@@ -23,14 +20,8 @@
           type="password"
           class="form-control"
           formControlName="password">
-          <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="text-danger">
-           Password is required
-          </div>
       </div>
-      <div class="text-danger mt-2" *ngIf="errorMessage">
-  {{ errorMessage }}
-</div>
-      </div>
+
       <button type="submit" (click)="login()" class="btn btn-primary w-100">
         Login
       </button>

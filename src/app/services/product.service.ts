@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Product } from '../models/product.model';
-
+import { categoryResponse } from '../models/category.model';
 export interface ProductsResponse {
   products: Product[];
   total: number;
@@ -30,14 +30,7 @@ getProducts(): Observable<Product[]> {
       catchError(this.handleError)
     );
 }
-  // getProducts(): Observable<Product[]> {
 
-  //   return this.http.get<any>(this.baseUrl+`/products`)
-  //     .pipe(
-  //       map(res=> res.products.data),
-  //       catchError(this.handleError)
-  //     );
-  // }
 
   getProductById(slug: any): Observable<any> {
     // console.log("called the get Product by slug");
@@ -48,53 +41,55 @@ getProducts(): Observable<Product[]> {
       );
   }
 
-  getCategories(): Observable<string[]> {
-    return this.http.get<any>(`${this.baseUrl}/products/categories`)
-      .pipe(
-        map(response => {
-          console.log('Raw categories API response:', response);
+  getCategories(): Observable<categoryResponse> {
+    return this.http.get<categoryResponse>(`${this.baseUrl}/categories`);
 
-          // Handle different response formats
-          let categories: string[] = [];
+    // return this.http.get<any>(`${this.baseUrl}/products/categories`)
+    //   .pipe(
+    //     map(response => {
+    //       console.log('Raw categories API response:', response);
 
-          if (Array.isArray(response)) {
-            categories = response;
-          } else if (response && Array.isArray(response.categories)) {
-            categories = response.categories;
-          } else if (response && typeof response === 'object') {
-            // Sometimes the API might return an object, extract values
-            categories = Object.values(response).filter(val => typeof val === 'string') as string[];
-          }
+    //       // Handle different response formats
+    //       let categories: string[] = [];
 
-          // Clean and format categories
-          const cleanCategories = categories
-            .filter(cat => cat && typeof cat === 'string')
-            .map(cat => cat.trim())
-            .filter(cat => cat.length > 0);
+    //       if (Array.isArray(response)) {
+    //         categories = response;
+    //       } else if (response && Array.isArray(response.categories)) {
+    //         categories = response.categories;
+    //       } else if (response && typeof response === 'object') {
+    //         // Sometimes the API might return an object, extract values
+    //         categories = Object.values(response).filter(val => typeof val === 'string') as string[];
+    //       }
 
-          console.log('Processed categories:', cleanCategories);
-          return cleanCategories;
-        }),
-        catchError((error) => {
-          console.error('Categories API error:', error);
-          return throwError(() => error);
-        })
-      );
+    //       // Clean and format categories
+    //       const cleanCategories = categories
+    //         .filter(cat => cat && typeof cat === 'string')
+    //         .map(cat => cat.trim())
+    //         .filter(cat => cat.length > 0);
+
+    //       console.log('Processed categories:', cleanCategories);
+    //       return cleanCategories;
+    //     }),
+    //     catchError((error) => {
+    //       console.error('Categories API error:', error);
+    //       return throwError(() => error);
+    //     })
+    //   );
   }
 
-  getProductsByCategory(category: string): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${this.baseUrl}/products/category/${encodeURIComponent(category)}`)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
+  // getProductsByCategory(category: string): Observable<ProductsResponse> {
+  //   return this.http.get<ProductsResponse>(`${this.baseUrl}/products/category/${encodeURIComponent(category)}`)
+  //     .pipe(
+  //       catchError(this.handleError)
+  //     );
+  // }
 
-  searchProducts(query: string): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(`${this.baseUrl}/products/search?q=${encodeURIComponent(query)}`)
-      .pipe( 
-        catchError(this.handleError)
-      );
-  }
+  // searchProducts(query: string): Observable<ProductsResponse> {
+  //   return this.http.get<ProductsResponse>(`${this.baseUrl}/products/search?q=${encodeURIComponent(query)}`)
+  //     .pipe( 
+  //       catchError(this.handleError)
+  //     );
+  // }
 
   addProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(

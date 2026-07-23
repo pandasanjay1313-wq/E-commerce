@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
 export class LoginComponent {
   
 loginForm: FormGroup;
- errorMessage: string = '';
+
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router){
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -36,10 +36,13 @@ loginForm: FormGroup;
   this.userService.login(email, password).subscribe({
     next: (res) => {
       console.log(res);
-      this.errorMessage = '';
+
+      // this.userService.currentUser.next(res.user.name);
       this.userService.currentUser.next(res.user.name);
       
       this.userService.isLoggedIn.next(true);
+
+      // this.userService.loginHistory$.next(`${email}-login Success`);
 
       this.router.navigate(['/products']);
 
@@ -47,16 +50,8 @@ loginForm: FormGroup;
     },
     error: (err) => {
       console.log(err);
-        if (err.error.message === "Email not found") {
-    this.errorMessage = "Email not found";
-  }
-  else if (err.error.message === "Incorrect password") {
-    this.errorMessage = "Incorrect password";
-  }
-  else {
-    this.errorMessage = "Invalid email or password";
-  }
-
+       this.userService.loginHistory$.next(
+    `${email} - Login Failed`);
     }
   });
     

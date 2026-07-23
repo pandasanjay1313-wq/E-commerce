@@ -68,7 +68,7 @@
 
             <!-- Max Price Filter -->
             <div class="col-md-2">
-              <!-- <label for="maxPriceFilter" class="form-label">Max Price</label> -->
+              <label for="maxPriceFilter" class="form-label">Max Price</label>
               <!-- <input
                 type="number"
                 id="maxPriceFilter"
