@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -15,7 +15,9 @@ export interface ProductsResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private baseUrl = 'http://192.168.10.35:8000/api/v1';
+  private baseUrl = 'http://127.0.0.1:8000/api/v1';
+
+searchText = signal('');
 
   constructor(private http: HttpClient) {}
 getProducts(): Observable<Product[]> {
@@ -30,6 +32,15 @@ getProducts(): Observable<Product[]> {
       catchError(this.handleError)
     );
 }
+  getProductPage(page: number=1): Observable<any>{
+    return this.http.get<any>(`${this.baseUrl}/product?page=${page}`);
+  }
+
+  setSearchText(value: string){
+    this.searchText.set(value);
+  }
+
+
 
 
   getProductById(slug: any): Observable<any> {

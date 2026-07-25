@@ -10,7 +10,7 @@ export class CartService {
   private cartSubject = new BehaviorSubject<CartItem[]>([]);
   public cart$ = this.cartSubject.asObservable();
 
-private baseurl = 'http://192.168.10.35:8000/api/v1/cart';
+private baseurl = 'http://127.0.0.1:8000/api/v1/cart';
 
   constructor(private http: HttpClient) {
         this.loadCartFromStorage(); 

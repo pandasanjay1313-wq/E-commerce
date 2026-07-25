@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { ProductService } from '../../services/product.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   cartCount$: Observable<number>;
 
-  constructor(private cartService: CartService, private userService: UserService, private router: Router) {
+  constructor(private cartService: CartService, private userService: UserService, private productService: ProductService, private router: Router) {
     this.cartCount$ = this.cartService.cart$.pipe(
       map(items => this.cartService.getCartCount())
     );
@@ -60,4 +61,12 @@ this.userService.logout().subscribe({
 
 }
 
+search(value: string){
+  this.productService.setSearchText(value);
+}
+// searchText = '';
+
+// onSearch() {
+//   this.productService.setSearchText(this.searchText);
+// }
 }

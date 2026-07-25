@@ -9,7 +9,7 @@ import { LogoutResponse } from '../models/logout.model';
 	providedIn: 'root'
 })
 export class UserService {
-	private baseurl = 'http://192.168.10.35:8000/api/v1';
+	private baseurl = 'http://127.0.0.1:8000/api/v1';
 	//subject
 	// currentUser = new Subject<string>();
 	

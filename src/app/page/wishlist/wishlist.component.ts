@@ -43,7 +43,7 @@ export class WishlistComponent implements OnInit {
 
    getwishUrl(path:string): string {
   
-      return `http://192.168.10.35:8000/${path}`;
+      return `http://127.0.0.1:8000/${path}`;
     }
   
 

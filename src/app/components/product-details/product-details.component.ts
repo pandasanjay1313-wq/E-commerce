@@ -151,12 +151,12 @@ export class ProductDetailsComponent implements OnInit {
   }
   getImageUrl(product: Product): string {
     
-    return 'http://192.168.10.35:8000/' + product.thumb_image;
+    return 'http://127.0.0.1:8000/' + product.thumb_image;
   }
   getImageGalleyUrl(image: any): string {
     // console.log("http://192.168.10.33:8000/"+ image);
     
-    return 'http://192.168.10.35:8000/' + image;
+    return 'http://127.0.0.1:8000/' + image;
   }
   
   onImageError(event: any): void {

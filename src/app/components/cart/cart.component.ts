@@ -254,7 +254,7 @@ console.log(item.product.id);
     return item.product.price * item.qty;
   }
   imgurl(image :any) {
-    return 'http://192.168.10.35:8000/' + image;
+    return 'http://127.0.0.1:8000/' + image;
   }
   
   onImageError(event: any): void {

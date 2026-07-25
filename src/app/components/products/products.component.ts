@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, OnInit } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductFilterCriteria } from '../../pipes/product-filter-pipe';
 import { ProductService } from '../../services/product.service';
@@ -19,7 +19,8 @@ export class ProductsComponent implements OnInit {
   categories: category[] = [];
   selectedCategory = '';
   isLoading: boolean = true;
-
+  currentPage = 1;
+  lastPage = 1;
   // // Filter properties
   // filterCriteria: ProductFilterCriteria = {
   //   category: 'string',
@@ -41,7 +42,17 @@ export class ProductsComponent implements OnInit {
     private cartService: CartService,
     private router: Router,
     private wishlistService: WishlistService
-  ) {}
+  ) {
+     effect(()=>{
+    const value = this.productService.searchText().toLowerCase();
+    if(value === ''){
+      this.allProducts =[...this.products];
+    }
+    else{
+      this.allProducts = this.products.filter(product=> product.name.toLowerCase().includes(value));
+    }
+  });
+  }
 
   ngOnInit(): void {
     console.log('ProductsComponent initialized');
@@ -59,9 +70,11 @@ export class ProductsComponent implements OnInit {
         console.log('Products response:', res);
         this.products = res;
         this.allProducts = [...this.products];
-
         this.extractCategories();
 
+      //   this.currentPage = res.product.current_page;
+
+      // this.lastPage = res.products.last_page;
         this.isLoading = false;
       },
       error: (error) => {
@@ -70,6 +83,8 @@ export class ProductsComponent implements OnInit {
       }
     });
   }
+
+ 
 
   loadCategories(): void {
 
@@ -204,22 +219,8 @@ export class ProductsComponent implements OnInit {
   //       }
   //     }
 
-  //     // Max price filter
-  //     if (this.filterCriteria.maxPrice !== null &&
-  //       this.filterCriteria.maxPrice !== undefined &&
-  //       this.filterCriteria.maxPrice > 0) {
-  //       if (product.price > this.filterCriteria.maxPrice) {
-  //         return false;
-  //       }
-  //     }
 
-  //     return true;
-  //   });
-  // }
 
-  // getFilteredProductsCount(): number {
-  //   return this.getFilteredProducts().length;
-  // }
 
   addToCart(product: Product): void {
       console.log(product);
@@ -249,7 +250,7 @@ export class ProductsComponent implements OnInit {
   getImageUrl(product: Product): string {
   //    console.log(product);
   // console.log(product.thumb_image);
-    return 'http://192.168.10.35:8000/'+ product.thumb_image;
+    return 'http://127.0.0.1:8000/'+ product.thumb_image;
   }
 
   onImageError(event: any, product: Product): void {
