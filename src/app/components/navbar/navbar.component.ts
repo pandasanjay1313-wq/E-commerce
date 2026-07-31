@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,21 +11,23 @@ import { ProductService } from '../../services/product.service';
   styleUrls: ['./navbar.component.css'],
   standalone: false
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit {
   cartCount$: Observable<number>;
-
-  constructor(private cartService: CartService, private userService: UserService, private productService: ProductService, private router: Router) {
+  Message: string= "";
+  isLoggedIn = false;
+  searchStatus = '';
+  constructor(private cartService: CartService,
+     private userService: UserService, 
+     private productService: ProductService, 
+     private router: Router) {
     this.cartCount$ = this.cartService.cart$.pipe(
-      map(items => this.cartService.getCartCount())
+      map(() => this.cartService.getCartCount())
     );
   }
-Message: string= "";
-isLoggedIn = false;
+
+
+
   ngOnInit(): void{
-    // this.userService.currentUser.subscribe(user=>{
-    //   this.message = user;
-    //   console.log("Current User:", user);
-    // });
     this.userService.currentUser.subscribe(user=>{
       this.Message = user;
       console.log(user);
@@ -34,8 +36,11 @@ isLoggedIn = false;
     this.userService.isLoggedIn.subscribe(status=>{
       this.isLoggedIn = status
     });
-
   }
+  ngAfterViewInit(): void {
+    this.searchStatus = '✅ Search Box is Ready';
+  }
+
 logout(){
 this.userService.logout().subscribe({
 
@@ -63,6 +68,12 @@ this.userService.logout().subscribe({
 
 search(value: string){
   this.productService.setSearchText(value);
+  if (value.trim()===''){
+      this.searchStatus = '❌Search Box is Not Ready';
+    }
+    else{
+      this.searchStatus = '🔍Searching...';
+    }
 }
 // searchText = '';
 

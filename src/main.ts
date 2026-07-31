@@ -1,5 +1,7 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
+import { signal, computed, effect } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
@@ -38,8 +40,8 @@ const user =[{id:1, name:"sanjay", age:22, mark:82},
             {id:4, name:"siddhu", age:18, mark:82}
 ];
 
-const res = user.filter(user => user.age >= 18)
-  .filter(user => user.mark >= 80)
+const res = user.filter(user => user.age >= 18 && user.mark >= 80)
+  // .filter(user => user.mark >= 80)
   .map(user => ({ name: user.name, mark:user.mark}))
   .filter(user =>user.name === "siddhu" )
 console.log(res);
@@ -78,7 +80,7 @@ const array = arr.flat();
 console.log(array);
 
 const ar =[1,[2,[3,[4,[5]]]]];
-console.log(ar.flat(Infinity));
+console.log(ar.flat(2));
 /////////////////////////// seven ///////////////////////////////
 const dtl = [
   {name:'san',
@@ -165,3 +167,66 @@ const obj = [   {
   const subj = sub.filter(subje => subje.name.startsWith("S"))
                 .map(subje=>subje.name);
   console.log(subj);
+
+  ///////////////////reduce //////////////////
+  const nums = [1, 2, 3, 4];
+
+const total = nums.reduce((sum, num) => {
+  return sum + num;
+});
+
+console.log(total);
+
+
+const cart = [
+  { price: 100 },
+  { price: 200 },
+  { price: 50 }
+];
+
+const temp = cart.reduce((sum, item) => sum + item.price, 0);
+console.log(temp);
+
+
+const marks = [80, 90, 70, 60];
+
+const num = marks.reduce((sum, mark) => sum + mark, 0);
+const average = total / marks.length;
+console.log(num);
+console.log(average);
+
+////////////////////signal & behavior////////////////////
+let count = signal(5);
+
+count.set(15);
+
+console.log(count());
+
+/////////////////
+
+let cont = new BehaviorSubject(0);
+
+cont.next(5);
+
+cont.subscribe(value => {
+  console.log(value);
+});
+
+let cnt = signal(20);
+ cnt.update(value=> value -8);
+ console.log(cnt());
+
+ let price = signal(100);
+ let quantity = signal(2);
+ let ttl = computed(()=> price() * quantity());
+  console.log(ttl());
+
+//////////////
+
+let tempt = signal(10);
+
+effect(()=>{
+  console.log(tempt());
+});
+
+

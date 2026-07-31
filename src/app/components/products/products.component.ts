@@ -1,4 +1,4 @@
-import { Component, effect, OnInit } from '@angular/core';
+import { Component, effect, OnInit, DoCheck } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { ProductFilterCriteria } from '../../pipes/product-filter-pipe';
 import { ProductService } from '../../services/product.service';
@@ -13,29 +13,13 @@ import { category } from '../../models/category.model';
   styleUrls: ['./products.component.css'],
   standalone: false
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, DoCheck {
   allProducts: Product[] = [];
   products: Product[] = [];
   categories: category[] = [];
   selectedCategory = '';
   isLoading: boolean = true;
-  currentPage = 1;
-  lastPage = 1;
-  // // Filter properties
-  // filterCriteria: ProductFilterCriteria = {
-  //   category: 'string',
-  //   name: 'string',
-  //   minPrice: null,
-  //   maxPrice: null
-  // };
-
-  // // Display values for active filters
-  // displayValues: ProductFilterCriteria = {
-  //   category: '',
-  //   name: 'string',
-  //   minPrice: null,
-  //   maxPrice: null
-  // };
+  checkMessage: string = '';
 
   constructor(
     private productService: ProductService,
@@ -59,6 +43,11 @@ export class ProductsComponent implements OnInit {
     this.loadData();
 
     this.loadCategories();
+  }
+
+  ngDoCheck(): void {
+    const currentTime = new Date().toLocaleTimeString();
+    this.checkMessage = `Product List Checked : ${currentTime}`;
   }
 
   loadData(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
@@ -13,12 +13,13 @@ import { WishlistService } from '../../services/wishlist.service';
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css'],
 })
-export class ProductDetailsComponent implements OnInit {
+export class ProductDetailsComponent implements OnInit, OnChanges {
   product: Product | null = null;
   loading: boolean = true;
   selectedImage: string = '';
   quantity: number = 1;
-
+  @Input() products : any;
+  updateMessage = '';
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -35,6 +36,17 @@ export class ProductDetailsComponent implements OnInit {
       }
     });
   }
+
+
+ngOnChanges(changes: SimpleChanges): void {
+  if(changes['products']){
+    this.updateMessage = `Selected Product Updated: ${this.product?.name}`;
+  }
+}
+
+
+
+
 
   loadProduct(id: any): void {
     this.loading = true;

@@ -1,6 +1,7 @@
 <div class="container mt-4">
 
   <h3>Wishlist</h3>
+     <div class="alert alert-warning mt-3">{{ DestroyMessage }}</div>
 
   <div class="card mb-3" *ngFor="let item of wishlist">
 
@@ -26,7 +27,6 @@
             (click)="remove(item.id)">
             Remove
           </button>
-
         </div>
       </div>
 

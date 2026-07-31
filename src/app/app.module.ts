@@ -14,6 +14,7 @@ import { appRoutes } from './app.routes';
 import { WishlistComponent } from './page/wishlist/wishlist.component';
 import { LoginComponent } from './page/login/login.component';
 import { LoginHistoryComponent } from './login-history/login-history.component';
+import { Highlight } from './directives/highlight';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { LoginHistoryComponent } from './login-history/login-history.component';
     FooterComponent,
     ProductFilterPipe,
     LoginHistoryComponent,
+    Highlight,
   
   ],
   imports: [

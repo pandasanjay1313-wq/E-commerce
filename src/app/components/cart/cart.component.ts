@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -15,11 +15,11 @@ declare var bootstrap: any;
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, AfterViewChecked  {
   cartItems: CartItem[] = [];
   quantityForms: { [key: number]: FormGroup } = {};
   isLoading: boolean = false;
-
+  cartViewStatus: string = '';
   constructor(
     private cartService: CartService,
     private fb: FormBuilder,
@@ -31,18 +31,20 @@ export class CartComponent implements OnInit {
       this.cartItems = res.cart_items;
     }
   });
-
-  // this.cartService.getCart().subscribe({
-  //   next: (res) => {
-  //     console.log('Cart Response:', res);
-  //   },
-  //   error: (err) => {
-  //     console.log('Cart Error:', err);
-  //   }
-  // });
     this.loadCartItems();
     // console.log(this.cartItems);
   }
+
+  ngAfterViewChecked(): void {
+    const now  = new Date();
+    this.cartViewStatus =`Cart View Updated: ${now.toLocaleString()}`;
+  }
+
+
+
+
+
+
 
   private loadCartItems(): void {
    this.cartService.getCart().subscribe({

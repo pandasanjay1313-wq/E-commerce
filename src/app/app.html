@@ -10,3 +10,128 @@
   </main>
   <app-footer *ngIf="!isAuthPage"></app-footer>
 </div>
+
+<h1>Directives</h1>
+<h2>Structural Directives</h2>
+@if (isLoggedIn) {
+  <h2>Welcome User</h2>
+}
+
+@if (isAdmin) {
+  <h2>Welcome Admin</h2>
+} @else {
+  <h2>Login </h2>
+}
+
+@for(product of products; track product){
+  <p>{{ product }}</p>
+}
+
+@for (student of students; track student) {
+  <p>
+    {{ student.id }} - {{ student.name }}
+  </p>
+}
+
+@switch (role) {
+
+  @case ('admin') {
+    <p>Admin Welcome</p>
+  }
+
+  @case ('user') {
+    <p>User Welcome</p>
+  }
+
+  @default {
+    <p  >Guest Welcome</p>
+  }
+
+}
+
+
+@switch (orderStatus) {
+
+  @case ('pending') {
+    <p>Order is Pending</p>
+  }
+
+  @case ('shipped') {
+    <p>Order is Shipped</p>
+  }
+
+  @case ('delivered') {
+    <p>Order is Delivered</p>
+  }
+
+  @default {
+    <p>Invalid Status</p>
+  }
+
+}
+
+<h2>Attribute Directives</h2>
+<button [ngClass]="{ active: isActive }">
+  Click Me
+</button>
+
+<p [ngClass]="mark >= 50 ? 'pass' : 'fail'">
+  Mark: {{ mark }}
+</p>
+
+<p [ngStyle]="{ color: textColor }">
+  Hello Angular
+</p>
+
+<h2 [ngStyle]="{ 'font-size.px': fontSize }">
+  Welcome
+</h2>
+
+<!-- change Detection -->
+
+<!-- <h1>{{ count }}</h1> -->
+
+  <!--<button (click)="increase()">
+    Increase
+  </button>
+
+  <button (click)="decrease()">decrease</button> -->
+
+<!--Custom Directive-->
+<h2 appHighlight color="yellow">
+  Angular Directive
+</h2>
+
+<p appHighlight color="lightgreen">
+  Hover Me
+</p>
+
+<p appBackground="yellow">
+  Angular
+</p>
+
+<p appBackground="lightgreen">
+  TypeScript
+</p>
+
+
+<!--  Ng Zone  -->
+<!--  run()  -->
+<h3>{{message}}</h3>
+<button (click)="loadData()">load Data</button>
+
+<!-- runOutsideAngular() -->
+
+<h3>{{count}}</h3>
+
+<button (click)="startTimer()">Start Timer</button>
+
+<!-- runOutsideAngular() + run() -->
+ <h3>{{addCount}}</h3>
+<button (click)="start()">Start</button>
+
+<!--Async -->
+<p>{{ cout$ | async}}</p>
+
+<!--Without Async-->
+<p>{{ cout }}</p>

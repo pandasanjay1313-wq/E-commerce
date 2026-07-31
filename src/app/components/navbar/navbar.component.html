@@ -12,14 +12,11 @@
         <input type="text"
                class="form-control" #txt (input)="search(txt.value)">
           <button
-          class="btn btn-primary"
-          >
-
-          <i class="fas fa-search"></i>
-
-        </button>
-
+          class="btn btn-primary">
+          <i class="fas fa-search"></i></button>
       </div>
+            <p class="text-white  mt-2">{{ searchStatus }}</p>
+
 
 
       <ul class="navbar-nav ms-auto">

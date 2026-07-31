@@ -32,9 +32,9 @@ getProducts(): Observable<Product[]> {
       catchError(this.handleError)
     );
 }
-  getProductPage(page: number=1): Observable<any>{
-    return this.http.get<any>(`${this.baseUrl}/product?page=${page}`);
-  }
+  // getProductPage(page: number=1): Observable<any>{
+  //   return this.http.get<any>(`${this.baseUrl}/product?page=${page}`);
+  // }
 
   setSearchText(value: string){
     this.searchText.set(value);
