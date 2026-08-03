@@ -69,15 +69,13 @@ this.userService.logout().subscribe({
 search(value: string){
   this.productService.setSearchText(value);
   if (value.trim()===''){
-      this.searchStatus = '❌Search Box is Not Ready';
-    }
-    else{
       this.searchStatus = '🔍Searching...';
     }
+    else{
+      this.searchStatus ='❌Search Box is Not Ready' ;
+    }
 }
-// searchText = '';
 
-// onSearch() {
-//   this.productService.setSearchText(this.searchText);
-// }
+
+
 }

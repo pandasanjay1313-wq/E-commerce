@@ -15,6 +15,7 @@ import { WishlistComponent } from './page/wishlist/wishlist.component';
 import { LoginComponent } from './page/login/login.component';
 import { LoginHistoryComponent } from './login-history/login-history.component';
 import { Highlight } from './directives/highlight';
+import { BrandsComponent } from './components/brands/brands.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { Highlight } from './directives/highlight';
     ProductFilterPipe,
     LoginHistoryComponent,
     Highlight,
+    BrandsComponent,
   
   ],
   imports: [

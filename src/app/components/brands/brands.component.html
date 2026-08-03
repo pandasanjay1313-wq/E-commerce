@@ -1,0 +1,9 @@
+<select
+class="form-select"
+(change)="onBrandChange($event)">
+    <option value="">All Brands</option>
+    <option
+    *ngFor="let brand of brands"
+    [value]="brand.id">{{ brand.name }}</option>
+
+</select>
