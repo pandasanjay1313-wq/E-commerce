@@ -2,6 +2,7 @@
 import { Routes } from '@angular/router';
 import { ProductsComponent } from './components/products/products.component';
 import { LoginHistoryComponent } from './login-history/login-history.component';
+import { RegiComponent } from './page/regi/regi.component';
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
@@ -12,6 +13,9 @@ export const appRoutes: Routes = [
   {
   path: 'register',
   loadComponent: () =>import('./page/register/register.component').then(m => m.RegisterComponent)},
+  
+  {path: 'regi', component: RegiComponent},  
+
   {
     path: 'products/:slug',
     loadComponent: () => import('./components/product-details/product-details.component').then(m => m.ProductDetailsComponent)

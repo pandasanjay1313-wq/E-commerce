@@ -16,6 +16,7 @@ import { LoginComponent } from './page/login/login.component';
 import { LoginHistoryComponent } from './login-history/login-history.component';
 import { Highlight } from './directives/highlight';
 import { BrandsComponent } from './components/brands/brands.component';
+import { RegiComponent } from './page/regi/regi.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { BrandsComponent } from './components/brands/brands.component';
     LoginHistoryComponent,
     Highlight,
     BrandsComponent,
+    RegiComponent,
   
   ],
   imports: [

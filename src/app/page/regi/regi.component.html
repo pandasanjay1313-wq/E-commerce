@@ -1,0 +1,30 @@
+
+     <div class="background">
+
+  <div class="register-card">
+
+    <h2>Create Account</h2>
+
+    <form [formGroup]="regiForm">
+
+      <input type="text" placeholder="Name" formControlName="name">
+
+      <input type="email" placeholder="Email" formControlName="email">
+
+      <input type="text" placeholder="Mobile" formControlName="mobile">
+
+      <input type="text" placeholder="State" formControlName="state">
+
+      <input type="text" placeholder="City" formControlName="city">
+
+      <input type="text" placeholder="Pincode" formControlName="pincode">
+
+      <input type="password" placeholder="Password" formControlName="password">
+
+      <button type="submit" (click)="regis()">Register</button>
+
+    </form>
+
+  </div>
+
+</div>

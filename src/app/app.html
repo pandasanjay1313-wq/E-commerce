@@ -11,7 +11,7 @@
   <app-footer *ngIf="!isAuthPage"></app-footer>
 </div>
 
-<h1>Directives</h1>
+<!-- <h1>Directives</h1>
 <h2>Structural Directives</h2>
 @if (isLoggedIn) {
   <h2>Welcome User</h2>
@@ -21,9 +21,9 @@
   <h2>Welcome Admin</h2>
 } @else {
   <h2>Login </h2>
-}
+} -->
 
-@for(product of products; track product){
+<!-- @for(product of products; track product){
   <p>{{ product }}</p>
 }
 
@@ -31,9 +31,9 @@
   <p>
     {{ student.id }} - {{ student.name }}
   </p>
-}
+} -->
 
-@switch (role) {
+<!-- @switch (role) {
 
   @case ('admin') {
     <p>Admin Welcome</p>
@@ -47,10 +47,10 @@
     <p  >Guest Welcome</p>
   }
 
-}
+} -->
 
 
-@switch (orderStatus) {
+<!-- @switch (orderStatus) {
 
   @case ('pending') {
     <p>Order is Pending</p>
@@ -68,9 +68,9 @@
     <p>Invalid Status</p>
   }
 
-}
+} -->
 
-<h2>Attribute Directives</h2>
+<!-- <h2>Attribute Directives</h2>
 <button [ngClass]="{ active: isActive }">
   Click Me
 </button>
@@ -85,20 +85,20 @@
 
 <h2 [ngStyle]="{ 'font-size.px': fontSize }">
   Welcome
-</h2>
+</h2> -->
 
 <!-- change Detection -->
 
 <!-- <h1>{{ count }}</h1> -->
 
-  <!--<button (click)="increase()">
+  <!-- <button (click)="increase()">
     Increase
-  </button>
+  </button> -->
 
-  <button (click)="decrease()">decrease</button> -->
+  <!-- <button (click)="decrease()">decrease</button> -->
 
 <!--Custom Directive-->
-<h2 appHighlight color="yellow">
+<!-- <h2 appHighlight color="yellow">
   Angular Directive
 </h2>
 
@@ -112,26 +112,26 @@
 
 <p appBackground="lightgreen">
   TypeScript
-</p>
+</p> -->
 
 
 <!--  Ng Zone  -->
 <!--  run()  -->
-<h3>{{message}}</h3>
-<button (click)="loadData()">load Data</button>
+<!-- <h3>{{message}}</h3>
+<button (click)="loadData()">load Data</button> -->
 
 <!-- runOutsideAngular() -->
 
-<h3>{{count}}</h3>
+<!-- <h3>{{count}}</h3>
 
 <button (click)="startTimer()">Start Timer</button>
 
-<!-- runOutsideAngular() + run() -->
- <h3>{{addCount}}</h3>
-<button (click)="start()">Start</button>
+ runOutsideAngular() + run() -->
+ <!--<h3>{{addCount}}</h3>
+<button (click)="start()">Start</button> -->
 
 <!--Async -->
 <p>{{ cout$ | async}}</p>
 
 <!--Without Async-->
-<p>{{ cout }}</p>
+<!-- <p>{{ cout }}</p> -->

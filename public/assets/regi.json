@@ -1,0 +1,24 @@
+[{
+    "id": 1,
+    "name": "sanjay",
+    "email":"sanjay67@gmail.com",
+    "mobile":"7418730628",
+    "address":{
+        "state":"tamilnadu",
+        "city":"kumbakonam",
+        "pincode":"612103"
+    },
+    "password":"sanjay123"
+},
+{
+    "id": 2,
+    "name": "praveen",
+    "email":"praveen6@gmail.com",
+    "mobile":"8248640835",
+    "address":{
+        "state":"karnataka",
+        "city":"bangalore",
+        "pincode":"560001"
+    },
+    "password":"praveen123" 
+}]

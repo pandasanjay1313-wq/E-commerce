@@ -18,13 +18,13 @@ export class AppComponent {
   constructor(public router: Router, private ngzone : NgZone){}
 
     get isAuthPage(): boolean {
-    return this.router.url === '/login' || this.router.url === '/register';
+    return this.router.url === '/login' || this.router.url === '/register'|| this.router.url === '/regi';
   }
   //////////////////////////////
 //////////without Async ////////////
 cout = 0;
 ngOnInit(){
-  interval(1000).subscribe(value=>{
+  interval(1000).subscribe(value=>{ 
     this.cout = value;
   });
 }
