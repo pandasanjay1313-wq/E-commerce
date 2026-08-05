@@ -1,0 +1,71 @@
+
+<div class="background">
+    <div class="form-card">
+<form *ngIf="config" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="h1">
+        <h1>{{config.title}}</h1>
+     </div>   
+  <div *ngFor="let section of config.sections">
+    <div class="h2">
+    <h2>{{ section.title }}</h2>
+    </div>  
+    <div *ngFor="let field of section.fields">
+
+      <label>{{ field.label }}</label>
+
+      <input
+        *ngIf="field.type != 'textarea'"
+        [type]="field.type"
+        [placeholder]="field.placeholder"
+        [formControlName]="field.name">
+
+      <textarea
+        *ngIf="field.type == 'textarea'"
+        [placeholder]="field.placeholder"
+        [formControlName]="field.name">
+      </textarea>
+
+      <div
+        *ngIf="form.get(field.name)?.touched &&
+               form.get(field.name)?.invalid">
+        
+         <small *ngIf="form.get(field.name)?.errors?.['required']">
+        {{field.validation.requiredMessage}}
+    </small>
+
+    <small *ngIf="form.get(field.name)?.errors?.['minlength']">
+        {{field.validation.minLengthMessage}}
+    </small>
+
+    <small *ngIf="form.get(field.name)?.errors?.['maxlength']">
+        {{field.validation.maxLengthMessage}}
+    </small>
+
+    <small *ngIf="form.get(field.name)?.errors?.['email']">
+        {{field.validation.emailMessage}}
+    </small>
+
+    <small *ngIf="form.get(field.name)?.errors?.['min']">
+        {{field.validation.minMessage}}
+    </small>
+
+    <small *ngIf="form.get(field.name)?.errors?.['max']">
+        {{field.validation.maxMessage}}
+    </small>
+        
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <br>
+
+  <button type="submit">
+    Submit
+  </button>
+
+</form>
+</div>
+</div>

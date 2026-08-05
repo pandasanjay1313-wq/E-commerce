@@ -1,0 +1,79 @@
+{
+    "formTitle": "Student register",
+    "sections": [
+        {"title":"Personal Details",
+        "fields":[
+        {
+            "type": "text",
+            "label": "first Name",
+            "name": "firstName",
+            "required":true   
+        },
+    {
+            "type": "text",
+            "label": "last Name",
+            "name": "lastName",
+            "required":true 
+        },
+    {
+         "type": "email",
+          "label": "Email",
+          "name": "email",
+          "required": true
+    },
+    {
+        "type": "number",
+          "label": "Age",
+          "name": "age",
+          "required": true
+        }
+      ]
+    },
+    {
+        "title":"Education Detail",
+        "fields":[{
+          "type": "select",
+          "label": "Department",
+          "name": "department",
+          "required": true,
+          "options": [
+            "CSE",
+            "ECE",
+            "EEE",
+            "MECH",
+            "CIVIL"
+          ]
+        },
+        {
+          "type": "radio",
+          "label": "Gender",
+          "name": "gender",
+          "required": true,
+          "options": [
+            "Male",
+            "Female"
+          ]
+        },
+        {
+          "type": "checkbox",
+          "label": "Accept Terms",
+          "name": "terms",
+          "required": true
+        }
+    
+    
+    
+    
+    ]
+    }
+
+
+
+
+
+
+
+
+
+]
+}

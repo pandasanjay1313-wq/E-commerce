@@ -10,10 +10,10 @@
     width:100%;
     min-height:100vh;
     display:flex;
-    justify-content:center;
-    align-items:center;
+    justify-content: center;
+    align-items: center;
 
-    background:linear-gradient(135deg,white,#dcdde2);
+    background:linear-gradient(135deg ,white,#f2f3f5);
 }
 
 .register-card{
@@ -29,7 +29,7 @@
 
     border:1px solid rgba(255,255,255,.3);
 
-    box-shadow:0 8px 30px rgba(0,0,0,.25);
+    box-shadow: 0 8px 30px rgba(0,0,0,.25);
 }
 
 .register-card h2{
@@ -52,8 +52,6 @@
     padding: 15px;
 
     border: 1px;
-
-    outline: none;
 
     border-radius:10px;
 

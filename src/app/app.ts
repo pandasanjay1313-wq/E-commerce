@@ -18,7 +18,9 @@ export class AppComponent {
   constructor(public router: Router, private ngzone : NgZone){}
 
     get isAuthPage(): boolean {
-    return this.router.url === '/login' || this.router.url === '/register'|| this.router.url === '/regi';
+    return this.router.url === '/login' || this.router.url === '/register'|| 
+    this.router.url === '/regi' || this.router.url === '/form' ||
+    this.router.url === '/appform';
   }
   //////////////////////////////
 //////////without Async ////////////

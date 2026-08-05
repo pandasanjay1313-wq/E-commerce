@@ -17,6 +17,8 @@ import { LoginHistoryComponent } from './login-history/login-history.component';
 import { Highlight } from './directives/highlight';
 import { BrandsComponent } from './components/brands/brands.component';
 import { RegiComponent } from './page/regi/regi.component';
+import { DyFormComponent } from './page/dy-form/dy-form.component';
+import { AppFormComponent } from './page/app-form/app-form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { RegiComponent } from './page/regi/regi.component';
     Highlight,
     BrandsComponent,
     RegiComponent,
+    DyFormComponent,
+    AppFormComponent,
   
   ],
   imports: [

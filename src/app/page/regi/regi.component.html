@@ -8,7 +8,7 @@
     <form [formGroup]="regiForm">
 
       <input type="text" placeholder="Name" formControlName="name">
-
+      
       <input type="email" placeholder="Email" formControlName="email">
 
       <input type="text" placeholder="Mobile" formControlName="mobile">
@@ -20,7 +20,9 @@
       <input type="text" placeholder="Pincode" formControlName="pincode">
 
       <input type="password" placeholder="Password" formControlName="password">
-
+      <div *ngIf="regiForm.get('password')?.touched && regiForm.get('password')?.invalid" class="text-danger">
+           Password is required
+          </div>
       <button type="submit" (click)="regis()">Register</button>
 
     </form>

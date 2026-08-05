@@ -1,0 +1,80 @@
+{
+  "regisForm": {
+    "title": "Registration Form",
+    "sections": [
+      {
+        "title": "Personal Details",
+        "fields": [
+          {
+            "name": "firstName",
+            "label": "First Name",
+            "type": "text",
+            "placeholder": "Enter First Name",
+            "validation": {
+              "required": true,
+              "minLength": 3,
+              "maxLength": 20
+            }
+          },
+          {
+            "name": "lastName",
+            "label": "Last Name",
+            "type": "text",
+            "placeholder": "Enter Last Name",
+            "validation": {
+              "required": true,
+              "minLength": 3,
+              "maxLength": 20
+            }
+          },
+          {
+            "name": "age",
+            "label": "Age",
+            "type": "number",
+            "placeholder": "Enter Age",
+            "validation": {
+              "required": true,
+              "min": 18,
+              "max": 50
+            }
+          }
+        ]
+      },
+      {
+        "title": "Contact Details",
+        "fields": [
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "email",
+            "placeholder": "Enter Email",
+            "validation": {
+              "required": true
+            }
+          },
+          {
+            "name": "mobile",
+            "label": "Mobile Number",
+            "type": "text",
+            "placeholder": "Enter Mobile Number",
+            "validation": {
+              "required": true,
+              "minLength": 10,
+              "maxLength": 10
+            }
+          },
+          {
+            "name": "address",
+            "label": "Address",
+            "type": "textarea",
+            "placeholder": "Enter Address",
+            "validation": {
+              "required": true,
+              "maxLength": 250
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+<form *ngIf="form && formConfig" [formGroup]="form">
+
+  <h2>{{ formConfig.title }}</h2>
+
+  <div *ngFor="let section of formConfig.sections">
+
+    <h3>{{ section.title }}</h3>
+
+    <div *ngFor="let field of section.fields">
+
+      <!-- Label -->
+      <label>{{ field.label }}</label>
+
+      <!-- Text / Email / Number -->
+      <input
+        *ngIf="field.type === 'text' ||
+               field.type === 'email' ||
+               field.type === 'number'"
+        [type]="field.type"
+        [placeholder]="field.placeholder"
+        [formControlName]="field.name">
+
+      <!-- Select -->
+      <select
+        *ngIf="field.type === 'select'"
+        [formControlName]="field.name">
+
+        <option value="">Select</option>
+
+        <option
+          *ngFor="let option of field.options"
+          [value]="option">
+
+          {{ option }}
+
+        </option>
+
+      </select>
+
+      <!-- Radio -->
+      <div *ngIf="field.type === 'radio'">
+
+        <label *ngFor="let option of field.options">
+
+          <input
+            type="radio"
+            [value]="option"
+            [formControlName]="field.name">
+
+          {{ option }}
+
+        </label>
+
+      </div>
+
+      <!-- Checkbox -->
+      <div *ngIf="field.type === 'checkbox'">
+
+        <input
+          type="checkbox"
+          [formControlName]="field.name">
+
+        {{ field.label }}
+
+      </div>
+
+      <br><br>
+
+    </div>
+
+  </div>
+
+  <button type="submit">
+    Submit
+  </button>
+
+</form>
