@@ -96,26 +96,6 @@
               </button> -->
             </div>
           </div>
-
-          <!-- Active Filters Display -->
-          <!-- <div *ngIf="displayValues.category || displayValues.name || displayValues.minPrice || displayValues.maxPrice"
-               class="mt-3 pt-3 border-top">
-            <h6 class="text-muted mb-2">Active Filters:</h6>
-            <div class="d-flex flex-wrap gap-2">
-              <span *ngIf="displayValues.category" class="badge bg-primary">
-                Category: {{ displayValues.category.name | titlecase }}
-              </span>
-              <span *ngIf="displayValues.name" class="badge bg-info">
-                Name: "{{ displayValues.name }}"
-              </span>
-              <span *ngIf="displayValues.minPrice" class="badge bg-success">
-                Min: ${{ displayValues.minPrice }}
-              </span>
-              <span *ngIf="displayValues.maxPrice" class="badge bg-warning text-dark">
-                Max: ${{ displayValues.maxPrice }}
-              </span>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -145,19 +125,6 @@
       </div>
     </div>
   </div>
-
-  <!-- No Filter Results Message -->
-  <!-- <div *ngIf="!isLoading && allProducts.length > 0 && getFilteredProductsCount() === 0" class="row"> -->
-    <!-- <div class="col-12">
-      <div class="alert alert-info text-center" role="alert">
-        <i class="fas fa-search fa-2x mb-3"></i>
-        <h5>No products found</h5>
-        <p class="mb-3">Try adjusting your filters or search criteria.</p>
-        <button type="button" class="btn btn-primary" (click)="resetFilters()">
-          <i class="fas fa-undo me-1"></i>Reset Filters
-        </button>
-      </div>
-    </div> -->
   </div>
 
   <!-- Products Grid -->
@@ -215,27 +182,6 @@
             {{ product.short_description.length > 100 ? (product.short_description | slice:0:100) + '...' : product.short_description }}
           </p>
 
-          <!-- Rating with Better Stars -->
-          <!-- <div class="mb-2">
-            <div class="d-flex align-items-center">
-              <div class="star-rating me-2">
-                <span
-                  *ngFor="let star of [1,2,3,4,5]"
-                  class="star"
-                  [ngClass]="{
-                    'filled': star <= Math.floor(product.rating),
-                    'half-filled': star === Math.ceil(product.rating) && product.rating % 1 !== 0,
-                    'empty': star > Math.ceil(product.rating)
-                  }">
-                  <i class="fas fa-star"></i>
-                </span>
-              </div>
-              <small class="text-muted rating-text">
-                {{ product.rating.toFixed(1) }}/5
-              </small>
-            </div>
-          </div> -->
-
           <!-- Price and Add to Cart -->
           <div class="mt-auto">
             <div class="d-flex justify-content-between align-items-center">
@@ -267,4 +213,9 @@
       </div>
     </div>
   </div>
+        <div style="text-align: center;">
+          <button (click)="previousPage()">Previous<< </button>
+          <span>{{ currentPage }}</span>
+          <button (click)="nextPage()">Next>></button>
+        </div>
 </div>

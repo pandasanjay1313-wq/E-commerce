@@ -20,7 +20,7 @@ export class ProductService {
 searchText = signal('');
 
   constructor(private http: HttpClient) {}
-getProducts(): Observable<Product[]> {
+getProducts(page: number, limit: number): Observable<Product[]> {
 
   return this.http.get<any>(this.baseUrl + `/products`)
     .pipe(

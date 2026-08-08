@@ -18,7 +18,7 @@
                 }
             },
             {
-                  "name": "employeeName",
+          "name": "employeeName",
           "label": "Employee Name",
           "type": "text",
           "placeholder": "Enter Employee Name",
@@ -74,6 +74,28 @@
           "validation": {"required": true,
             "requiredMessage": "Joining Date is required"
           }
+        },
+        {
+          "name": "fromDate",
+          "label": "From Date",
+          "type": "date",
+          "validation": {
+              "required": true,
+              "requiredMessage": "From Date is required",
+              "dateNotPast": true,
+              "dateNotPastMessage": "From Date cannot be a previous date"
+          }
+        },
+        {
+           "name": "toDate",
+           "label": "To Date",
+           "type": "date",
+           "validation": {
+             "required": true,
+             "requiredMessage": "To Date is required",  
+             "dateAfter": "fromDate",
+             "dateAfterMessage": "To Date cannot be less than From Date"
+            }
         }
       ]
     }

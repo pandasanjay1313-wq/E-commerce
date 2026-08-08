@@ -23,7 +23,20 @@ export class AppFormComponent implements OnInit {
       // alert('jsons Loaded'); 
       this.config =response;
       this.form = this.appformService.buildForm(this.config);
+
+      //to date
+       this.form.get('toDate')?.valueChanges.subscribe(() => {
+          this.checkDates();
+        });
+      
+        this.form.get('fromDate')?.valueChanges.subscribe(() => {
+          this.checkDates();
+        });  
     });
+
+     
+
+
   }
 
   submit(){
@@ -35,5 +48,25 @@ export class AppFormComponent implements OnInit {
       this.form.markAllAsTouched();
     }
   }
+
+  allowIndianNum(event: Event, fieldName: string): void{
+  const input = event.target as HTMLInputElement;
+
+  input.value = input.value.replace(/[^0-9]/g, '');
+
+  this.form.get(fieldName)?.setValue(input.value);
+  }
+
+  checkDates(): void{
+    const fromDate = this.form.get('fromDate')?.value;
+    const toDate = this.form.get('toDate')?.value;
+
+    if (fromDate && toDate && toDate < fromDate) {
+    this.form.get('toDate')?.setErrors({
+      dateAfter: true
+     });
+    }
+  }
+
 
 }

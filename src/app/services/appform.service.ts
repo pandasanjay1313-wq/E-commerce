@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FormBuilder, FormGroup,Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
 
 @Injectable({
     providedIn:'root'
@@ -42,6 +42,24 @@ export class AppformService {
           }
 
           if (field.type === 'email') {validatorArray.push(Validators.email);
+          }
+          if (validation.pattern) {validatorArray.push(Validators.pattern(validation.pattern));
+          }
+          if(validation.dateNotPast){
+            validatorArray.push((control: AbstractControl)=>{
+              if(!control.value){
+                return null;
+              }
+              const today = new Date();
+              const selectedDate = new Date(control.value);
+              today.setHours(0, 0, 0, 0);
+              selectedDate.setHours(0, 0, 0, 0);
+
+              if (selectedDate < today) {
+                return { dateNotPast: true };
+              }
+               return null;
+            });
           }
 
         }

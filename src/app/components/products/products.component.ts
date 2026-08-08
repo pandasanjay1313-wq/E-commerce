@@ -15,12 +15,16 @@ import { category } from '../../models/category.model';
 })
 export class ProductsComponent implements OnInit, DoCheck {
   allProducts: Product[] = [];
-  products: Product[] = [];
   categories: category[] = [];
   selectedCategory = '';
   isLoading: boolean = true;
   checkMessage: string = '';
 
+  //pagination
+  currentPage = 1;
+  pageSize = 10;
+  totalPage= 0;
+  products: Product[]= [];
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -54,7 +58,7 @@ export class ProductsComponent implements OnInit, DoCheck {
     console.log('Loading data...'); 
 
     // Load products first
-    this.productService.getProducts().subscribe({
+    this.productService.getProducts(this.currentPage, this.pageSize).subscribe({
       next: (res) => {
         console.log('Products response:', res);
         this.products = res;
@@ -72,6 +76,15 @@ export class ProductsComponent implements OnInit, DoCheck {
       }
     });
   }
+//pagination
+nextPage(){
+  this.currentPage++;
+  this.loadData();
+}
+ previousPage(){
+  this.currentPage--;
+  this.loadData();
+ }
 
  
 

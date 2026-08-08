@@ -61,11 +61,13 @@
           },
           {
             "name": "mobile",
-            "label": "Mobile Number: ",
-            "type": "text",
+            "label": "Mobile Number",
+            "type": "mobile",
             "placeholder": "Enter Mobile Number",
             "validation": {
               "required": true,
+              "pattern": "^[6-9][0-9]{9}$",
+              "patternMessage": "Indian Number Only",
               "minLength": 10,
               "maxLength": 10
             }

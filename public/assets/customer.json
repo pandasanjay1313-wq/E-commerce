@@ -45,16 +45,16 @@
         },
         {
           "name": "mobile",
-          "label": "Mobile",
-          "type": "text",
+          "label": "Mobile Number",
+          "type": "mobile",
           "placeholder": "Enter Mobile Number",
           "validation": {
             "required": true,
+            "pattern": "^[6-9][0-9]{9}$",
+            "patternMessage": "Indian number Only",
             "requiredMessage": "Mobile Number is required",
             "minLength": 10,
-            "minLengthMessage": "Mobile Number must be 10 digits",
-            "maxLength": 10,
-            "maxLengthMessage": "Mobile Number must be 10 digits"
+            "maxLength": 10
           }
         }
       ]

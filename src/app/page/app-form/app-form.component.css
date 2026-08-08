@@ -81,3 +81,27 @@ button:hover{
     margin-bottom:15px;
     font-size:14px;
 }
+.mobile-input {
+  display: flex;
+  width: 350px;
+  margin: 0 auto 10px;
+}
+
+.country-code {
+  width: 70px;
+  padding: 10px;
+  background: #eceaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px 0 0 14px;
+  font-size: 18px;
+}
+
+.mobile-input input {
+  width: auto;
+  flex: 1;
+  margin-bottom: 0;
+  border-radius: 0 14px 14px 0;
+  min-width: 0;
+}

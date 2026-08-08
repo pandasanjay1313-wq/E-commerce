@@ -12,13 +12,24 @@
 
       <label>{{ field.label }}</label>
 
+
+
       <!-- Text, Email, Number -->
-      <input
-        *ngIf="field.type !== 'textarea'"
-        [type]="field.type"
+       <div *ngIf="field.type === 'mobile'" class="mobile-input">
+        <span class="country-code">+91</span>
+        <input type="text"
         [placeholder]="field.placeholder"
         [formControlName]="field.name"
-      />
+        maxlength="10"
+        inputmode="numeric"
+        (input)="allowIndianNum($event, field.name)">
+       </div>
+
+        <input
+        *ngIf="field.type !== 'textarea' && field.name !== 'mobile'"
+        [type]="field.type"
+        [placeholder]="field.placeholder"
+        [formControlName]="field.name">
 
       <!-- Textarea -->
       <textarea
@@ -29,70 +40,64 @@
 
 
       <!-- Required Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('required')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('required')">
         {{ field.validation.requiredMessage || field.label + ' is required' }}
       </div>
 
 
       <!-- Min Length Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('minlength')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('minlength')">
         {{ field.validation.minLengthMessage || 
         'Minimum ' + field.validation.minLength + ' characters required' }}
       </div>
 
 
       <!-- Max Length Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('maxlength')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('maxlength')">
         {{ field.validation.maxLengthMessage ||
         'Maximum ' + field.validation.maxLength + ' characters allowed' }}
       </div>
 
 
       <!-- Min Value Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('min')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('min')">
         {{ field.validation.minMessage }}
       </div>
 
 
       <!-- Max Value Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('max')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('max')">
         {{ field.validation.maxMessage }}
       </div>
 
 
       <!-- Email Error -->
-      <div 
-        class="error"
-        *ngIf="
-          form.get(field.name)?.touched &&
-          form.get(field.name)?.hasError('email')
-        ">
+      <div class="error"
+        *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('email')">
         {{ field.validation.emailMessage || 'Invalid Email' }}
+      </div>
+
+      <!--phone validation-->
+      <div class="error"
+      *ngIf="field.type ==='mobile' && form.get(field.name)?.touched && form.get(field.name)?.hasError('pattern')">
+      {{field.validation?.patternMessage || 'Indian number only'}}
+      </div>
+
+      <!--from date-->
+      <div class="error"
+      *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('dateNotPast')">
+       {{ field.validation.dateAfterMessage || 'Date cannot be previous date' }}
+      </div>
+
+      <div class="error"
+      *ngIf="form.get(field.name)?.touched && form.get(field.name)?.hasError('dateAfter')">
+      {{ field.validation.dateAfterMessage || 'To Date cannot be less than From Date'}}
+
       </div>
 
     </div>
