@@ -19,6 +19,8 @@ import { BrandsComponent } from './components/brands/brands.component';
 import { RegiComponent } from './page/regi/regi.component';
 import { DyFormComponent } from './page/dy-form/dy-form.component';
 import { AppFormComponent } from './page/app-form/app-form.component';
+import { CommonModule } from '@angular/common';
+import { ProviderComponent } from './components/provider/provider.component';
 
 @NgModule({
   declarations: [
@@ -33,10 +35,12 @@ import { AppFormComponent } from './page/app-form/app-form.component';
     RegiComponent,
     DyFormComponent,
     AppFormComponent,
+    ProviderComponent,
   
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,

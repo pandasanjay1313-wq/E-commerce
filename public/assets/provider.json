@@ -1,0 +1,107 @@
+{
+    "title":"Provider Form",
+    "sections":[
+        {
+            "title":"Provider Details",
+            "fields":[
+                {
+                    "name":"providerId",
+                    "label":"Provider ID",
+                    "type":"text",
+                    "placeholder":"Enter Provider ID",
+                    "validation":{
+                        "required":true,
+                        "requiredMessage":"Provider ID is Required"
+                    }
+                },
+                {
+                    "name":"providerName",
+                    "label":"Provider Name",
+                    "type":"text",
+                    "placeholder":"Enter Provider Name",
+                    "validation":{
+                        "required":true,
+                        "requiredMessage":"Provider Name is Required",
+                        "minLength":3,
+                        "minLengthMessage":"minimum length 3",
+                        "max":20,
+                        "maxLengthMessage":"maximum length 20"
+                    }
+                },
+                {
+                     "name": "companyName",
+                     "label": "Company Name",
+                     "type": "text",
+                     "placeholder": "Enter Company Name",
+                     "validation": {
+                        "required": true,
+                        "requiredMessage": "Company Name is required",
+                        "minLength": 3,
+                        "minLengthMessage": "Minimum 3 characters required",
+                        "maxLength": 50,
+                        "maxLengthMessage": "Maximum 50 characters allowed"
+                    }
+                },
+                {
+                    "name": "email",
+                    "label": "Email",
+                    "type": "email",
+                    "placeholder": "Enter Email",
+                    "validation": {
+                        "required": true,
+                        "requiredMessage": "Email is required",
+                        "emailMessage": "Enter a valid Email Address"
+                    }                    
+                }
+            ]
+        },
+
+
+        {
+                "title": "Contact Details",
+                "fields": [
+                    {
+                        "name": "mobile",
+                        "label": "Mobile",
+                        "type": "text",
+                        "placeholder": "Enter Mobile Number",
+                        "validation": {
+                            "required": true,
+                            "requiredMessage": "Mobile Number is required",
+                            "minLength": 10,
+                            "minLengthMessage": "Mobile Number must be 10 digits",
+                            "maxLength": 10,
+                            "maxLengthMessage": "Mobile Number must be 10 digits"
+                        }
+                    },
+                    {
+                        "name": "gstNumber",
+                        "label": "GST Number",
+                        "type": "text",
+                        "placeholder": "Enter GST Number",
+                        "validation": {
+                            "required": true,
+                            "requiredMessage": "GST Number is required",
+                            "minLength": 15,
+                            "minLengthMessage": "GST Number must be 15 characters",
+                            "maxLength": 15,
+                            "maxLengthMessage": "GST Number must be 15 characters"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "label": "Address",
+                        "type": "textarea",
+                        "placeholder": "Enter Address",
+                        "validation": {
+                            "required": true,
+                            "requiredMessage": "Address is required",
+                            "maxLength": 250,
+                            "maxLengthMessage": "Maximum 250 characters allowed"
+                        }
+                    }
+                ]
+            }
+
+        ]
+}

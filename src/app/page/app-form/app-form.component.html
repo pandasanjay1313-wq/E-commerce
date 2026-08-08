@@ -1,66 +1,104 @@
-
 <div class="background">
-    <div class="form-card">
-<form *ngIf="config" [formGroup]="form" (ngSubmit)="submit()">
-    <div class="h1">
-        <h1>{{config.title}}</h1>
-     </div>   
+<div class="form-card">
+<h1 style="text-align: center;" *ngIf="config">{{ config.title }}</h1>
+
+<form *ngIf="form" [formGroup]="form" (ngSubmit)="submit()">
+
   <div *ngFor="let section of config.sections">
-    <div class="h2">
+
     <h2>{{ section.title }}</h2>
-    </div>  
+
     <div *ngFor="let field of section.fields">
 
       <label>{{ field.label }}</label>
 
+      <!-- Text, Email, Number -->
       <input
-        *ngIf="field.type != 'textarea'"
+        *ngIf="field.type !== 'textarea'"
         [type]="field.type"
         [placeholder]="field.placeholder"
-        [formControlName]="field.name">
+        [formControlName]="field.name"
+      />
 
+      <!-- Textarea -->
       <textarea
-        *ngIf="field.type == 'textarea'"
+        *ngIf="field.type === 'textarea'"
         [placeholder]="field.placeholder"
         [formControlName]="field.name">
       </textarea>
 
-      <div
-        *ngIf="form.get(field.name)?.touched &&
-               form.get(field.name)?.invalid">
-        
-         <small *ngIf="form.get(field.name)?.errors?.['required']">
-        {{field.validation.requiredMessage}}
-    </small>
 
-    <small *ngIf="form.get(field.name)?.errors?.['minlength']">
-        {{field.validation.minLengthMessage}}
-    </small>
+      <!-- Required Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('required')
+        ">
+        {{ field.validation.requiredMessage || field.label + ' is required' }}
+      </div>
 
-    <small *ngIf="form.get(field.name)?.errors?.['maxlength']">
-        {{field.validation.maxLengthMessage}}
-    </small>
 
-    <small *ngIf="form.get(field.name)?.errors?.['email']">
-        {{field.validation.emailMessage}}
-    </small>
+      <!-- Min Length Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('minlength')
+        ">
+        {{ field.validation.minLengthMessage || 
+        'Minimum ' + field.validation.minLength + ' characters required' }}
+      </div>
 
-    <small *ngIf="form.get(field.name)?.errors?.['min']">
-        {{field.validation.minMessage}}
-    </small>
 
-    <small *ngIf="form.get(field.name)?.errors?.['max']">
-        {{field.validation.maxMessage}}
-    </small>
-        
+      <!-- Max Length Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('maxlength')
+        ">
+        {{ field.validation.maxLengthMessage ||
+        'Maximum ' + field.validation.maxLength + ' characters allowed' }}
+      </div>
 
+
+      <!-- Min Value Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('min')
+        ">
+        {{ field.validation.minMessage }}
+      </div>
+
+
+      <!-- Max Value Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('max')
+        ">
+        {{ field.validation.maxMessage }}
+      </div>
+
+
+      <!-- Email Error -->
+      <div 
+        class="error"
+        *ngIf="
+          form.get(field.name)?.touched &&
+          form.get(field.name)?.hasError('email')
+        ">
+        {{ field.validation.emailMessage || 'Invalid Email' }}
       </div>
 
     </div>
 
   </div>
 
-  <br>
 
   <button type="submit">
     Submit
@@ -69,3 +107,75 @@
 </form>
 </div>
 </div>
+<!-- 
+<div class="background">
+
+  <div class="form-card">
+
+    <form *ngIf="config"
+          [formGroup]="form"
+          (ngSubmit)="submit()">
+
+      <h1>{{ config.title }}</h1>
+
+      <div *ngFor="let section of config.sections">
+
+        <h2>{{ section.title }}</h2>
+
+        <div *ngFor="let field of section.fields">
+
+          <label>{{ field.label }}</label>
+
+          <input
+            *ngIf="field.type != 'textarea'"
+            [type]="field.type"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.name">
+
+          <textarea
+            *ngIf="field.type == 'textarea'"
+            [placeholder]="field.placeholder"
+            [formControlName]="field.name">
+          </textarea>
+
+          <div *ngIf="form.get(field.name)?.touched">
+
+            <small *ngIf="form.get(field.name)?.errors?.['required']">
+              {{ field.validation.requiredMessage }}
+            </small>
+
+            <small *ngIf="form.get(field.name)?.errors?.['minlength']">
+              {{ field.validation.minLengthMessage }}
+            </small>
+
+            <small *ngIf="form.get(field.name)?.errors?.['maxlength']">
+              {{ field.validation.maxLengthMessage }}
+            </small>
+
+            <small *ngIf="form.get(field.name)?.errors?.['email']">
+              {{ field.validation.emailMessage }}
+            </small>
+
+            <small *ngIf="form.get(field.name)?.errors?.['min']">
+              {{ field.validation.minMessage }}
+            </small>
+
+            <small *ngIf="form.get(field.name)?.errors?.['max']">
+              {{ field.validation.maxMessage }}
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <button type="submit">
+        Submit
+      </button>
+
+    </form>
+
+  </div>
+
+</div> -->

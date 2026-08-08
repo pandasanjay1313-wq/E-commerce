@@ -7,11 +7,11 @@ import { Observable } from "rxjs";
 })
 
 export class StuformService {
-    constructor(private http: HttpClient){}
+    // constructor(private http: HttpClient){}
 
-    getForm():Observable<any>{
-        return this.http.get('assets/student-form.json');
-    }
+    // getForm():Observable<any>{
+    //     return this.http.get('assets/student-form.json');
+    // }
 
 
 

@@ -1,0 +1,81 @@
+{
+    "title":"Employee Form",
+    "sections":[
+        {
+            "title":"Employee Details",
+            "fields":[{
+                "name":"employeeId",
+                "label":"Employee ID",
+                "type":"text",
+                "placeholder":"Enter Employee ID",
+                "validation": {
+                    "required": true,
+                    "requiredMessage": "Employee ID is required",
+                    "minLength": 4,
+                    "minLengthMessage": "Minimum 4 characters required",
+                    "maxLength": 10,
+                    "maxLengthMessage": "Maximum 10 characters allowed"
+                }
+            },
+            {
+                  "name": "employeeName",
+          "label": "Employee Name",
+          "type": "text",
+          "placeholder": "Enter Employee Name",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Employee Name is required",
+            "minLength": 3,
+            "minLengthMessage": "Minimum 3 characters required",
+            "maxLength": 30,
+            "maxLengthMessage": "Maximum 30 characters allowed"
+          }
+        }
+    ]
+},
+    {
+      "title": "Job Details",
+      "fields": [
+        {
+          "name": "department",
+          "label": "Department",
+          "type": "text",
+          "placeholder": "Enter Department",
+          "validation": {"required": true,
+                        "requiredMessage": "Department is required"}
+        },
+        {
+          "name": "designation",
+          "label": "Designation",
+          "type": "text",
+          "placeholder": "Enter Designation",
+          "validation": {"required": true,
+                        "requiredMessage": "Designation is required"}
+        },
+        {
+          "name": "salary",
+          "label": "Salary",
+          "type": "number",
+          "placeholder": "Enter Salary",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Salary is required",
+            "min": 10000,
+            "minMessage": "Minimum salary is 10000",
+            "max": 100000,
+            "maxMessage": "Maximum salary is 100000"
+          }
+        },
+        {
+          "name": "joiningDate",
+          "label": "Joining Date",
+          "type": "date",
+          "placeholder": "",
+          "validation": {"required": true,
+            "requiredMessage": "Joining Date is required"
+          }
+        }
+      ]
+    }
+    ]
+}

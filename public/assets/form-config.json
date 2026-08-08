@@ -1,5 +1,4 @@
 {
-  "regisForm": {
     "title": "Registration Form",
     "sections": [
       {
@@ -84,5 +83,5 @@
         ]
       }
     ]
-  }
+  
 }

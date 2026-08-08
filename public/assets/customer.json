@@ -1,0 +1,104 @@
+{
+  "title": "Customer Form",
+  "sections": [
+    {
+      "title": "Customer Details",
+      "fields": [
+        {
+          "name": "customerId",
+          "label": "Customer ID",
+          "type": "text",
+          "placeholder": "Enter Customer ID",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Customer ID is required",
+            "minLength": 4,
+            "minLengthMessage": "Minimum 4 characters required",
+            "maxLength": 10,
+            "maxLengthMessage": "Maximum 10 characters allowed"
+          }
+        },
+        {
+          "name": "customerName",
+          "label": "Customer Name",
+          "type": "text",
+          "placeholder": "Enter Customer Name",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Customer Name is required",
+            "minLength": 3,
+            "minLengthMessage": "Minimum 3 characters required",
+            "maxLength": 30,
+            "maxLengthMessage": "Maximum 30 characters allowed"
+          }
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "placeholder": "Enter Email",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Email is required",
+            "emailMessage": "Enter a valid Email Address"
+          }
+        },
+        {
+          "name": "mobile",
+          "label": "Mobile",
+          "type": "text",
+          "placeholder": "Enter Mobile Number",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Mobile Number is required",
+            "minLength": 10,
+            "minLengthMessage": "Mobile Number must be 10 digits",
+            "maxLength": 10,
+            "maxLengthMessage": "Mobile Number must be 10 digits"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Address Details",
+      "fields": [
+        {
+          "name": "address",
+          "label": "Address",
+          "type": "textarea",
+          "placeholder": "Enter Address",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Address is required",
+            "maxLength": 250,
+            "maxLengthMessage": "Maximum 250 characters allowed"
+          }
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "placeholder": "Enter City",
+          "validation": {
+            "required": true,
+            "requiredMessage": "City is required"
+          }
+        },
+        {
+          "name": "pincode",
+          "label": "Pincode",
+          "type": "text",
+          "placeholder": "Enter Pincode",
+          "validation": {
+            "required": true,
+            "requiredMessage": "Pincode is required",
+            "minLength": 6,
+            "minLengthMessage": "Pincode must be 6 digits",
+            "maxLength": 6,
+            "maxLengthMessage": "Pincode must be 6 digits"
+          }
+        }
+      ]
+    }
+  ]
+}

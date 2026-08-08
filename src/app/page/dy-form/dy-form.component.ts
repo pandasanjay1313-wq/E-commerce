@@ -8,44 +8,44 @@ import { StuformService } from '../../services/stuform.service';
   templateUrl: './dy-form.component.html',
   styleUrl: './dy-form.component.css'
 })
-export class DyFormComponent implements OnInit {
+export class DyFormComponent {
 
-  form! : FormGroup;
-  formConfig: any;
+  // form! : FormGroup;
+  // formConfig: any;
 
-  constructor(private formService: StuformService ){}
+  // constructor(private formService: StuformService ){}
 
-    ngOnInit(): void {
-      this.loadForm();
-    }
+  //   ngOnInit(): void {
+  //     this.loadForm();
+  //   }
 
-    loadForm():void {
-       this.formService.getForm().subscribe((response) => {
+  //   loadForm():void {
+  //      this.formService.getForm().subscribe((response) => {
 
-      this.formConfig = response;
+  //     this.formConfig = response;
 
-      this.createForm();
+  //     this.createForm();
 
-    });
+  //   });
 
-    }
+  //   }
 
-    createForm(): void{
-      const group: any={};
-      this.formConfig.sections.forEach((section:any) => {
-        section.fields.forEach((field:any)=>{
-          const validators =[];
+  //   createForm(): void{
+  //     const group: any={};
+  //     this.formConfig.sections.forEach((section:any) => {
+  //       section.fields.forEach((field:any)=>{
+  //         const validators =[];
 
-          if(field.required){
-            validators.push(Validators.required);
-          }
+  //         if(field.required){
+  //           validators.push(Validators.required);
+  //         }
 
-          group[field.name] = new FormControl('',validators);
+  //         group[field.name] = new FormControl('',validators);
 
-        });
-      });
-      this.form = new FormGroup(group);
-    }
+  //       });
+  //     });
+  //     this.form = new FormGroup(group);
+  //   }
 
 
 }

@@ -1,4 +1,4 @@
-<form *ngIf="form && formConfig" [formGroup]="form">
+<!-- <form *ngIf="form && formConfig" [formGroup]="form">
 
   <h2>{{ formConfig.title }}</h2>
 
@@ -6,22 +6,22 @@
 
     <h3>{{ section.title }}</h3>
 
-    <div *ngFor="let field of section.fields">
+    <div *ngFor="let field of section.fields"> -->
 
       <!-- Label -->
-      <label>{{ field.label }}</label>
+      <!-- <label>{{ field.label }}</label> -->
 
       <!-- Text / Email / Number -->
-      <input
+      <!-- <input
         *ngIf="field.type === 'text' ||
                field.type === 'email' ||
                field.type === 'number'"
         [type]="field.type"
         [placeholder]="field.placeholder"
-        [formControlName]="field.name">
+        [formControlName]="field.name"> -->
 
       <!-- Select -->
-      <select
+      <!-- <select
         *ngIf="field.type === 'select'"
         [formControlName]="field.name">
 
@@ -35,10 +35,10 @@
 
         </option>
 
-      </select>
+      </select> -->
 
       <!-- Radio -->
-      <div *ngIf="field.type === 'radio'">
+      <!-- <div *ngIf="field.type === 'radio'">
 
         <label *ngFor="let option of field.options">
 
@@ -51,10 +51,10 @@
 
         </label>
 
-      </div>
+      </div> -->
 
       <!-- Checkbox -->
-      <div *ngIf="field.type === 'checkbox'">
+      <!-- <div *ngIf="field.type === 'checkbox'">
 
         <input
           type="checkbox"
@@ -74,4 +74,4 @@
     Submit
   </button>
 
-</form>
+</form> -->
