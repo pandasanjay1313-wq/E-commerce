@@ -85,9 +85,14 @@ ngOnChanges(changes: SimpleChanges): void {
 
   addToCart(): void {
     if (this.product) {
-      for (let i = 0; i < this.quantity; i++) {
-        this.cartService.addToCart(this.product.id);
-      }
+      this.cartService.addToCart(this.product.id, this.quantity).subscribe({
+        next:(Response)=>{
+          this.showSuccessMessage = Response.message;
+        },
+        error:(error)=>{
+          this.showSuccessMessage = error.error?.message||'something went wrong';
+        }
+      });
       this.showSuccessMessage();
     }
   }

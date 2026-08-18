@@ -6,6 +6,7 @@ import { RegiComponent } from './page/regi/regi.component';
 import { DyFormComponent } from './page/dy-form/dy-form.component';
 import { AppFormComponent } from './page/app-form/app-form.component';
 import { ProviderComponent } from './components/provider/provider.component';
+import { CommonListComponent } from './components/common-list/common-list.component';
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'products', component: ProductsComponent },
@@ -22,6 +23,10 @@ export const appRoutes: Routes = [
   {path: 'appform', component: AppFormComponent},
   {path: 'loghis', component: LoginHistoryComponent},
   {path: 'provid', component: ProviderComponent},
+
+  //commonLIST
+
+  {path:'commonlist', component:CommonListComponent},
   {
     path: 'products/:slug',
     loadComponent: () => import('./components/product-details/product-details.component').then(m => m.ProductDetailsComponent)

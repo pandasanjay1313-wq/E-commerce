@@ -11,7 +11,7 @@ import { category } from '../../models/category.model';
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
-  standalone: false
+  standalone: false,
 })
 export class ProductsComponent implements OnInit, DoCheck {
   allProducts: Product[] = [];
@@ -23,30 +23,46 @@ export class ProductsComponent implements OnInit, DoCheck {
   //pagination
   currentPage = 1;
   pageSize = 10;
-  totalPage= 0;
-  products: Product[]= [];
+  totalPage = 0;
+  products: Product[] = [];
+
+  //common list
+  product: any[] = [];
+
+  columns = [
+    { field: 'id', label: 'ID' },
+    { field: 'name', label: 'NAME' },
+    { field: 'price', label: 'PRICE' },
+    { field: 'category.name', label: 'CATEGORY' },
+  ];
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private router: Router,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
   ) {
-     effect(()=>{
-    const value = this.productService.searchText().toLowerCase();
-    if(value === ''){
-      this.allProducts =[...this.products];
-    }
-    else{
-      this.allProducts = this.products.filter(product=> product.name.toLowerCase().includes(value));
-    }
-  });
+    effect(() => {
+      const value = this.productService.searchText().toLowerCase();
+      if (value === '') {
+        this.allProducts = [...this.products];
+      } else {
+        this.allProducts = this.products.filter((product) =>
+          product.name.toLowerCase().includes(value),
+        );
+      }
+    });
   }
 
   ngOnInit(): void {
     console.log('ProductsComponent initialized');
     this.loadData();
-
     this.loadCategories();
+
+    this.productService.getProducts(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        this.product = response;
+      },
+    });
   }
 
   ngDoCheck(): void {
@@ -55,7 +71,8 @@ export class ProductsComponent implements OnInit, DoCheck {
   }
 
   loadData(): void {
-    console.log('Loading data...'); 
+    console.log('Loading data...');
+    console.log(this.pageSize);
 
     // Load products first
     this.productService.getProducts(this.currentPage, this.pageSize).subscribe({
@@ -65,78 +82,55 @@ export class ProductsComponent implements OnInit, DoCheck {
         this.allProducts = [...this.products];
         this.extractCategories();
 
-      //   this.currentPage = res.product.current_page;
+        //   this.currentPage = res.product.current_page;
 
-      // this.lastPage = res.products.last_page;
+        // this.lastPage = res.products.last_page;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error loading products:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
-//pagination
-nextPage(){
-  this.currentPage++;
-  this.loadData();
-}
- previousPage(){
-  this.currentPage--;
-  this.loadData();
- }
-
- 
+  //pagination
+  nextPage() {
+    this.currentPage++;
+    this.loadData();
+  }
+  previousPage() {
+    this.currentPage--;
+    this.loadData();
+  }
 
   loadCategories(): void {
-
     this.productService.getCategories().subscribe({
-      next: (res)=> {
+      next: (res) => {
         console.log(res);
         this.categories = res.categories;
       },
-      error: (err)=>{
+      error: (err) => {
         console.log(err);
-      }
+      },
     });
-    // console.log('Attempting to load categories from API...');
-
-    // this.productService.getCategories().subscribe({
-    //   next: (apiCategories) => {
-    //     console.log('Categories API response:', apiCategories);
-
-    //     if (apiCategories && apiCategories.length > 0) {
-    //       // Merge API categories with extracted ones, remove duplicates
-    //       const allCategories = [...new Set([...this.categories, ...apiCategories])];
-    //       this.categories = allCategories.sort();
-    //       console.log('Final merged categories:', this.categories);
-    //     } else {
-    //       console.log('No valid categories from API, using extracted categories');
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('Error loading categories from API, using extracted categories:', error);
-    //     // Categories already extracted from products, so we're good
-    //   }
-    // });
   }
 
-  filterCategory(category: category | null){
-  console.log("Clicked:", category);
+  filterCategory(category: category | null) {
+    console.log('Clicked:', category);
 
-  console.log("Products:", this.products);
+    console.log('Products:', this.products);
 
-  if (category == null) {
-    this.allProducts = [...this.products];
-    return;
-  }
+    if (category == null) {
+      this.allProducts = [...this.products];
+      return;
+    }
 
-  this.allProducts = this.products.filter(product => {
-    console.log(product.category.name, category.name);
-    return product.category.name === category.name;
-  });
+    this.allProducts = this.products.filter((product) => {
+      console.log(product.category.name, category.name);
+      return product.category.name === category.name;
+    });
 
-  console.log(this.allProducts);
+    console.log(this.allProducts);
   }
 
   private extractCategories(): void {
@@ -144,25 +138,24 @@ nextPage(){
     if (this.allProducts && this.allProducts.length > 0) {
       const categorySet = new Set(
         this.allProducts
-          .map(product => product.category.name)
-          .filter(category => category && typeof category === 'string')
-          .map(category => category.trim())
+          .map((product) => product.category.name)
+          .filter((category) => category && typeof category === 'string')
+          .map((category) => category.trim()),
       );
       // this.categories = Array.from(categorySet).sort();
       console.log('Extracted categories:', this.categories);
     }
   }
 
-  addToWishlist(product: Product){
-    this.wishlistService.addToWishlist(product.id)
-    .subscribe({
-      next:(res)=>{
+  addToWishlist(product: Product) {
+    this.wishlistService.addToWishlist(product.id).subscribe({
+      next: (res) => {
         alert(res.message);
       },
 
-      error:(err)=>{
+      error: (err) => {
         alert(err.error.message);
-      }
+      },
     });
   }
 
@@ -221,25 +214,22 @@ nextPage(){
   //       }
   //     }
 
-
-
-
   addToCart(product: Product): void {
-      console.log(product);
+    console.log(product);
     this.cartService.addToCart(product.id).subscribe({
       next: (res) => {
         //  console.log(res);
         alert(res.message);
 
-        this.cartService.getCart().subscribe(cart => {
-      console.log(cart);
-    });
+        this.cartService.getCart().subscribe((cart) => {
+          console.log(cart);
+        });
       },
 
       error: (err) => {
         // console.log(err.error);
         alert(err.error.message);
-      }
+      },
     });
     // this.showSuccessMessage(product.name);
   }
@@ -250,9 +240,9 @@ nextPage(){
   }
 
   getImageUrl(product: Product): string {
-  //    console.log(product);
-  // console.log(product.thumb_image);
-    return 'http://127.0.0.1:8000/'+ product.thumb_image;
+    //    console.log(product);
+    // console.log(product.thumb_image);
+    return 'http://127.0.0.1:8000/' + product.thumb_image;
   }
 
   onImageError(event: any, product: Product): void {

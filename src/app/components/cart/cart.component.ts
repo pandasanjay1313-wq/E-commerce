@@ -150,9 +150,14 @@ console.log(item.product.id);
     if (
       this.cartItems.length > 0 &&
       confirm('Are you sure you want to clear your entire cart?')
-    ) {
+    )
+    {
+        this.cartService.clearCart();
+            this.cartService.clearCart();
+             this.showNotification('Cart cleared successfully', 'info');
+    
       this.cartService.clearCart();
-      this.showNotification('Cart cleared successfully', 'info');
+      // this.showNotification('Cart cleared successfully', 'info');
     }
   }
 

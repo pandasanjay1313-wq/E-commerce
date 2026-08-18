@@ -1,0 +1,49 @@
+<br><br>
+<div class="common-list">
+<div class="filter-row">
+    <div class="filter-item">
+    <input 
+        type="text"
+        placeholder="Search"
+        [(ngModel)]="searchText">
+</div><br>
+<div class="filter-item">
+    <label>Category</label>
+    <select [(ngModel)]="selectedCategory">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
+    </select>
+</div><br>
+<div class="filter-item">
+    <label>Sort</label>
+    <select [(ngModel)]="sortField" (change)="sortData()">
+        <option value="">Default</option>
+        <option value="name">Name</option>
+        <option value="price">Price</option>
+    </select>
+    <select [(ngModel)]="sortDirection" (change)="sortData">
+        <option value="">Order</option>
+        <option value="asc">Ascending</option>
+        <option value="dsc">Decending</option>
+    </select>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th *ngFor="let column of columns"
+            style.category="font-size:100%">
+                {{column.label}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of filterData">
+            <td *ngFor="let column of columns">
+                {{getValue(item, column.field)}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
+</div>

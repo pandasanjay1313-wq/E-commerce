@@ -19,7 +19,7 @@ export class AppFormComponent implements OnInit {
   ngOnInit(): void{
      
     this.http.get<any>(`assets/${this.jsonFile}.json`).subscribe((response)=>{
-      console.log("JSON RESPONSE:", response);
+      // console.log("JSON RESPONSE:", response);
       // alert('jsons Loaded'); 
       this.config =response;
       this.form = this.appformService.buildForm(this.config);

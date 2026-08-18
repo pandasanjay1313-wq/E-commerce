@@ -26,7 +26,7 @@ private baseurl = 'http://127.0.0.1:8000/api/v1/cart';
     return this.http.post<any>(`${this.baseurl}/add`,{
       product_id:productId,
       qty:qty,
-    })
+    });
   }
 
   removeFromCart(id: number) {
