@@ -221,4 +221,33 @@
         <app-common-list [data]="product"
                          [columns]="columns"
                          [categories]="categories"></app-common-list>
+
+       <app-common-button [label]="'Add product'"
+                         [type]="'button'"
+                         [disabled]="false"
+                         (clicked)="openForm()"></app-common-button>
+       <div *ngIf="showForm">
+        <h3>add Product</h3>
+        <input type="text" placeholder="Product Name" [(ngModel)]="productName">
+        <input type="number" placeholder="Price" [(ngModel)]="productPrice">
+        <button type="button" (click)="addProduct()">Save</button>
+
+         <!-- <p>Product Name: {{ productName }}</p>
+         <p>Price: {{ productPrice }}</p> -->
+       </div>
+       <app-common-accordion [title]="accordionTitle"
+                             [content]="accordionContent"></app-common-accordion>
+                             
+       <app-date-picker [label]="'Offer Date'"
+                        [value]="selectedDate"
+                        [minDate]="minDate"
+                        [maxDate]="maxDate"
+                        (dateChange)="onDateSelected($event)"></app-date-picker>
+       
+       <app-common-dropdown [label]="'Category'"
+                            [options]="categories"
+                            [valueField]="'id'"
+                            [labelField]="'name'"
+                            [selectedValue]="selectedCategory"
+                            (valueChange)="onCategoryChange($event)"></app-common-dropdown>                       
 </div>

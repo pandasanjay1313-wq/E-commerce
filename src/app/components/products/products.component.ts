@@ -6,6 +6,7 @@ import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 import { WishlistService } from '../../services/wishlist.service';
 import { category } from '../../models/category.model';
+import { CommonButtonComponent } from '../../commonfiles/common-button/common-button.component';
 
 @Component({
   selector: 'app-products',
@@ -35,6 +36,39 @@ export class ProductsComponent implements OnInit, DoCheck {
     { field: 'price', label: 'PRICE' },
     { field: 'category.name', label: 'CATEGORY' },
   ];
+  ////common button ////
+  buttonLabel: string = 'Add product';
+
+  buttonType: 'button' | 'submit' | 'reset'= 'button';
+
+  buttonDisabled: boolean = false;
+
+  showForm: boolean = false;
+
+  productName: string = '';
+  productPrice: number | null = null;
+
+  openForm(): void {
+  this.showForm = true;
+}
+
+////common Accordion ///
+
+accordionTitle: string ='Terms & Conditions';
+
+accordionContent: string ='An e-commerce terms and conditions (T&C) agreement acts as a legal contract between your online store and your shoppers. It sets rules for site use, outlines pricing and payment terms, defines return policies, and limits your legal liability if things go wrong.';
+
+///Date picker////
+selectedDate: string ='';
+
+minDate: string='2026-01-01';
+maxDate: string='2026-12-31';
+
+onDateSelected(date:string):void{
+  this.selectedDate = date;
+}
+
+
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -69,6 +103,48 @@ export class ProductsComponent implements OnInit, DoCheck {
     const currentTime = new Date().toLocaleTimeString();
     this.checkMessage = `Product List Checked : ${currentTime}`;
   }
+  ///common button add product
+
+  addProduct(): void{
+    if(!this.productName || this.productPrice === null){
+      alert('please enter name and price');
+      return;
+    }
+
+    const product ={
+      name: this.productName,
+      price:this.productPrice
+    };
+
+    this.product.push(product);
+    alert('product add successfully');
+
+    this.productName='';
+    this.productPrice= null;
+    this.showForm = false;
+  }
+
+  ///dropDown////
+  categoriess = [
+  {
+    id: 1,
+    name: 'Electronics'
+  },
+  {
+    id: 2,
+    name: 'Clothing'
+  },
+  {
+    id: 3,
+    name: 'Books'
+  }
+];
+selectedCategorys: any = '';
+
+onCategoryChange(value: any): void {
+    this.selectedCategorys = value;
+  }
+
 
   loadData(): void {
     console.log('Loading data...');

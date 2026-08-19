@@ -22,6 +22,10 @@ import { AppFormComponent } from './page/app-form/app-form.component';
 import { CommonModule } from '@angular/common';
 import { ProviderComponent } from './components/provider/provider.component';
 import { CommonListComponent } from './components/common-list/common-list.component';
+import { CommonButtonComponent } from './commonfiles/common-button/common-button.component';
+import { CommonAccordionComponent } from './commonfiles/common-accordion/common-accordion.component';
+import { DatePickerComponent } from './commonfiles/date-picker/date-picker.component';
+import { CommonDropdownComponent } from './commonfiles/common-dropdown/common-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +42,10 @@ import { CommonListComponent } from './components/common-list/common-list.compon
     AppFormComponent,
     ProviderComponent,
     CommonListComponent,
+    CommonButtonComponent,
+    CommonAccordionComponent,
+    DatePickerComponent,
+    CommonDropdownComponent,
   
   ],
   imports: [

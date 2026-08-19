@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart.model';
 import { debounceTime } from 'rxjs';
-
 declare var bootstrap: any;
 
 @Component({
@@ -20,6 +19,10 @@ export class CartComponent implements OnInit, AfterViewChecked  {
   quantityForms: { [key: number]: FormGroup } = {};
   isLoading: boolean = false;
   cartViewStatus: string = '';
+
+  //common List
+  // cartItem: any[] =[];
+
   constructor(
     private cartService: CartService,
     private fb: FormBuilder,
@@ -27,8 +30,8 @@ export class CartComponent implements OnInit, AfterViewChecked  {
 
   ngOnInit(): void {
       this.cartService.getCart().subscribe({
-    next: (res) => {
-      this.cartItems = res.cart_items;
+    next: (response) => {
+      this.cartItems = response.data;
     }
   });
     this.loadCartItems();
@@ -39,6 +42,14 @@ export class CartComponent implements OnInit, AfterViewChecked  {
     const now  = new Date();
     this.cartViewStatus =`Cart View Updated: ${now.toLocaleString()}`;
   }
+
+  //common List///
+
+  // cartColumns =[
+  //   {field:'product.name', label:'PRODUCT'},
+  //   {field: 'price', label:'LABEL'},
+  //   {field:'qty',label:'QUANTITY'}
+  // ]
 
 
 

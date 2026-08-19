@@ -1,0 +1,9 @@
+<div>
+    <label>{{label}}</label>
+
+    <input type="date"
+           [value]="value"
+           [min]="minDate"
+           [max]="maxDate"
+           (change)="onDateChange($event)">
+</div><br><br>

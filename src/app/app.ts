@@ -20,8 +20,7 @@ export class AppComponent {
     get isAuthPage(): boolean {
     return this.router.url === '/login' || this.router.url === '/register'|| 
     this.router.url === '/regi' || this.router.url === '/form' ||
-    this.router.url === '/appform' || this.router.url === "/loghis" || this.router.url === "/provid"||
-    this.router.url === '/commonlist';
+    this.router.url === '/appform' || this.router.url === "/loghis" || this.router.url === "/provid";
   }
   //////////////////////////////
 //////////without Async ////////////
