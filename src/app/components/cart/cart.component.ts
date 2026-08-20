@@ -52,11 +52,6 @@ export class CartComponent implements OnInit, AfterViewChecked  {
   // ]
 
 
-
-
-
-
-
   private loadCartItems(): void {
    this.cartService.getCart().subscribe({
     next: (res) => {
@@ -331,4 +326,5 @@ console.log(item.product.id);
   }
 
   protected readonly Date = Date;
+
 }

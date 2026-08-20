@@ -169,7 +169,38 @@
             <i class="fas fa-heart me-2"></i>Add to Wishlist
           </button>
         </div>
+        <!---accordion -->
+        <div>
+           <button type="button" (click)="toggleAccordion(4)" class="btn btn-primary w-10">Details 1</button>
+     
+      <div *ngIf="activeAccordion === 4">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+          Explicabo placeat excepturi eligendi magnam mollitia omnis expedita quo ipsum libero quasi voluptate eius,
+           laudantium perspiciatis fugiat accusantium a magni at saepe!</p>
+      </div>
+      <div>
+        <button type="button" (click)="toggleAccordion(5)" class="btn btn-primary w-10">Details 2</button>
+         <div *ngIf="activeAccordion === 5">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+          Explicabo placeat excepturi eligendi magnam mollitia omnis expedita quo ipsum libero quasi voluptate eius,
+           laudantium perspiciatis fugiat accusantium a magni at saepe!</p>
+      </div>
 
+      </div>
+      <div>
+        <button type="button" (click)="toggleAccordion(6)" class="btn btn-primary w-10 ">Details 3</button>
+         <div *ngIf="activeAccordion === 6">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+          Explicabo placeat excepturi eligendi magnam mollitia omnis expedita quo ipsum libero quasi voluptate eius,
+           laudantium perspiciatis fugiat accusantium a magni at saepe!</p>
+      </div>
+        
+      </div>
+
+
+
+
+        </div>
         <!-- Additional Product Info -->
         <div class="additional-info mt-4">
           <div class="row g-3">

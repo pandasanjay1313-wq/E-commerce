@@ -7,14 +7,42 @@
         placeholder="Search"
         [(ngModel)]="searchText">
 </div><br>
-<div class="filter-item">
-    <label>Category</label>
+<div class="category-dropdown">
+    <input type="text" 
+            placeholder="search Category"
+            [(ngModel)]="categorySearchText"
+            (focus)="showCategoryDropDown = true"
+            (input)="showCategoryDropDown = true">
+
+
+     
+
+        <div class="category-options"
+        *ngIf="showCategoryDropDown">
+
+            <div class="category-option"
+            (click)="selectedCategory='';
+            categorySearchText = '';
+            showCategoryDropDown = false">
+                All categories
+            </div>
+
+            <div class="category-option "
+            *ngFor="let category of filtercategories"
+            (click)="selectCategory(category)">
+                <p>{{category.name}}
+            </div>
+
+        </div>
+
+
+    <!-- <label>Category</label>
     <select [(ngModel)]="selectedCategory">
         <option value="">All Categories</option>
         <option *ngFor="let category of categories" [value]="category.name">{{category.name}}</option>
-    </select>
+    </select> -->
 </div><br>
-<div class="filter-item">
+<!-- <div class="filter-item">
     <label>Sort</label>
     <select [(ngModel)]="sortField" (change)="sortData()">
         <option value="">Default</option>
@@ -26,24 +54,78 @@
         <option value="asc">Ascending</option>
         <option value="dsc">Decending</option>
     </select>
+</div> -->
+
+
+
+<div class="table-settings">
+    <label>
+    Header Color:
+    <input
+      type="color"
+      [(ngModel)]="headerColor">
+  </label>
+    <label>
+    Row 1 Color:
+    <input type="color" [(ngModel)]="rowColor1">
+  </label>
+
+  <label>
+    Row 2 Color:
+    <input type="color" [(ngModel)]="rowColor2">
+  </label>
+
+  <!-- <button type="button" (click)="saveTableColors()"> Save </button> -->
 </div>
+
+
+
+
+
 <table>
     <thead>
         <tr>
             <th *ngFor="let column of columns"
-            style.category="font-size:100%">
+                class="sortable"
+                [style.background-color]="headerColor"
+                [style.color]="getTextColor(headerColor)"
+                (click)="sortTable(column.field)">
+
                 {{column.label}}
+
+                <span class="sort-icons">
+                <span>▲</span>
+                <span>▼</span>
+                </span>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of filterData">
+        <tr *ngFor="let item of paginatedData; let i= index"
+         [style.background-color]="i % 2 === 0 ? rowColor1 : rowColor2"
+         [style.color]="getTextColor(i % 2 === 0 ? rowColor1 : rowColor2)">
+
             <td *ngFor="let column of columns">
                 {{getValue(item, column.field)}}
             </td>
         </tr>
     </tbody>
 </table>
+
+<div class="pagination">
+
+    <button (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage ===1 ">Pre</button>
+    <button
+      *ngFor="let page of pages"
+      (click)="goToPage(page)"
+      [class.active]="currentPage === page"> {{ page }} </button>
+      
+    <button
+      (click)="goToPage(currentPage + 1)"
+      [disabled]="currentPage === totalPages"> Next </button>
+      
+</div>
 
 
 <!-- <table>

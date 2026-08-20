@@ -54,9 +54,32 @@ export class ProductsComponent implements OnInit, DoCheck {
 
 ////common Accordion ///
 
-accordionTitle: string ='Terms & Conditions';
+openAccordionIndex: number = -1;
 
-accordionContent: string ='An e-commerce terms and conditions (T&C) agreement acts as a legal contract between your online store and your shoppers. It sets rules for site use, outlines pricing and payment terms, defines return policies, and limits your legal liability if things go wrong.';
+toggleAccordion(index: number): void {
+  if (this.openAccordionIndex === index) {
+    this.openAccordionIndex = -1;
+  }
+  else {
+    this.openAccordionIndex = index;
+  }
+}
+
+Accordion=[
+  {
+    Title:'Terms & Conditions',
+    Content:'An e-commerce terms and conditions (T&C) agreement acts as a legal contract between your online store and your shoppers.It sets rules for site use, outlines pricing and payment terms, defines return policies, and limits your legal liability if things go wrong.'
+  },
+  {
+    Title:'Privacy Policy',
+    Content:'A privacy policy is a legal statement that tells users how a website or app collects, uses, stores, and protects personal data. It builds trust with visitors and meets legal rules set by global data laws.'
+  },
+  {
+    Title:'Shipping Policy',
+    Content:'A shipping policy is a clear guide on an online store. It tells buyers how fast items ship, how much delivery costs, and what delivery areas the business serves. It helps stop confusion and answers buyer questions before they buy.'
+  }
+  
+];
 
 ///Date picker////
 selectedDate: string ='';
@@ -97,6 +120,8 @@ onDateSelected(date:string):void{
         this.product = response;
       },
     });
+
+    this.loadProducts(1);
   }
 
   ngDoCheck(): void {
@@ -125,20 +150,6 @@ onDateSelected(date:string):void{
   }
 
   ///dropDown////
-  categoriess = [
-  {
-    id: 1,
-    name: 'Electronics'
-  },
-  {
-    id: 2,
-    name: 'Clothing'
-  },
-  {
-    id: 3,
-    name: 'Books'
-  }
-];
 selectedCategorys: any = '';
 
 onCategoryChange(value: any): void {
@@ -234,61 +245,21 @@ onCategoryChange(value: any): void {
       },
     });
   }
+/////////////////////pagination///////////////////////
 
-  // updateFilters(): void {
-  //   console.log('Updating filters:', this.filterCriteria);
-  //   this.displayValues = {
-  //     category: this.filterCriteria.category,
-  //     title: this.filterCriteria.title,
-  //     minPrice: this.filterCriteria.minPrice,
-  //     maxPrice: this.filterCriteria.maxPrice
-  //   };
-  // }
+loadProducts(page: number=1):void{
+  this.productService.getProductPage(page).subscribe((response:any)=>{
+    this.product = response.product.data;
+    this.currentPage= response.product.current_page;
+    this.totalPage= response.product.last_page;
 
-  // resetFilters(): void {
-  //   console.log('Resetting filters');
-  //   this.filterCriteria = {
-  //     category: '',
-  //     title: '',
-  //     minPrice: null,
-  //     maxPrice: null
-  //   };
-  //   this.displayValues = {
-  //     category: '',
-  //     title: '',
-  //     minPrice: null,
-  //     maxPrice: null
-  //   };
-  // }
+  })
+}
 
-  // getFilteredProducts(): Product[] {
-  //   if (!this.allProducts) return [];
 
-  //   return this.allProducts.filter(product => {
-  //     // Category filter
-  //     if (this.filterCriteria.category && this.filterCriteria.category.trim() !== '') {
-  //       if (product.category.name.toLowerCase() !== this.filterCriteria.category.toLowerCase()) {
-  //         return false;
-  //       }
-  //     }
-
-  //     // Title filter
-  //     if (this.filterCriteria.title && this.filterCriteria.title.trim() !== '') {
-  //       const searchTerm = this.filterCriteria.title.toLowerCase().trim();
-  //       const productTitle = product.name.toLowerCase();
-  //       if (!productTitle.includes(searchTerm)) {
-  //         return false;
-  //       }
-  //     }
-
-  //     // Min price filter
-  //     if (this.filterCriteria.minPrice !== null &&
-  //       this.filterCriteria.minPrice !== undefined &&
-  //       this.filterCriteria.minPrice > 0) {
-  //       if (product.price < this.filterCriteria.minPrice) {
-  //         return false;
-  //       }
-  //     }
+ 
+  
+ 
 
   addToCart(product: Product): void {
     console.log(product);

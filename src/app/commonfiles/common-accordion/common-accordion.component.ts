@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-common-accordion',
@@ -12,10 +12,12 @@ export class CommonAccordionComponent {
 
   @Input() content: string ='';
 
-  isOpen:   boolean= false;
+  @Input() isOpen: boolean = false;
+
+  @Output() toggle = new EventEmitter<void>();
   
   toggleAccordion():void{
-    this.isOpen =!this.isOpen;
+    this.toggle.emit();
   }
 
   

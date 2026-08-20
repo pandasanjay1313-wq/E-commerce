@@ -12,13 +12,146 @@ td {
 }
 
 th {
-  background-color: #f5f5f5;
   font-weight: 600;
+  border: 1px solid #ddd;
+  padding: 10px 12px;
 }
 
 tr:hover {
   background-color: #f9f9f9;
 }
+
+.common-list {
+  width: 100%;
+}
+
+/* Pagination container */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* All pagination buttons */
+
+.pagination button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Hover */
+
+.pagination button:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+/* Active page */
+
+.pagination button.active {
+  background: #333;
+  color: white;
+  border-color: #333;
+}
+
+/* Disabled Previous / Next */
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+.category-dropdown {
+  position: relative;
+  width: 200px;
+}
+
+.category-dropdown input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.category-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.category-option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.category-option:hover {
+  background: #f0f0f0;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-icons {
+  display: inline-flex;
+  flex-direction: column;
+  margin-left: 5px;
+  line-height: 7px;
+}
+
+.sort-icons span {
+  font-size: 9px;
+}
+
+.table-settings {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.table-settings label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-settings input[type="color"] {
+  width: 40px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.table-settings button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.table-settings button:hover {
+  background: #555;
+}
+
+
+
 /* {
   font-size: 300%;
 } */

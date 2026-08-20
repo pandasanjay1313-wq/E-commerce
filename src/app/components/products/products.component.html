@@ -220,7 +220,10 @@
         </div>
         <app-common-list [data]="product"
                          [columns]="columns"
-                         [categories]="categories"></app-common-list>
+                         [categories]="categories"
+                         [totalPage]="totalPage"
+                         (pageChange)="loadProducts($event)"
+                         ></app-common-list>
 
        <app-common-button [label]="'Add product'"
                          [type]="'button'"
@@ -235,9 +238,12 @@
          <!-- <p>Product Name: {{ productName }}</p>
          <p>Price: {{ productPrice }}</p> -->
        </div>
-       <app-common-accordion [title]="accordionTitle"
-                             [content]="accordionContent"></app-common-accordion>
-                             
+       <div *ngFor="let Accordion of Accordion; let i= index">
+       <app-common-accordion [title]="Accordion.Title"
+                             [content]="Accordion.Content"
+                             [isOpen]="openAccordionIndex === i"
+                             (toggle)="toggleAccordion(i)"></app-common-accordion>
+       </div>                     
        <app-date-picker [label]="'Offer Date'"
                         [value]="selectedDate"
                         [minDate]="minDate"

@@ -20,6 +20,11 @@ export class ProductDetailsComponent implements OnInit, OnChanges {
   quantity: number = 1;
   @Input() products : any;
   updateMessage = '';
+
+   isOpen1: boolean = false;
+   isOpen2: boolean = false;
+   isOpen3: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -43,11 +48,36 @@ ngOnChanges(changes: SimpleChanges): void {
     this.updateMessage = `Selected Product Updated: ${this.product?.name}`;
   }
 }
+ 
+////////Accordion
+activeAccordion: number | null = null;
+
+ toggleAccordion(index: number): void {
+  if(this.activeAccordion === index){
+    this.activeAccordion = null;
+  }
+  else{
+    this.activeAccordion= index;
+  }
+
+ }
+
+
+  // toggle1():void{
+  //   this.isOpen1 = !this.isOpen1;
+  // }
+
+  // toggle2():void{
+  //   this.isOpen2 = !this.isOpen2;
+  // }
+
+  // toggle3():void{
+  //   this.isOpen3 = !this.isOpen3;
+  // }
 
 
 
-
-
+/////////////////////////////////////////////////////////////////////////
   loadProduct(id: any): void {
     this.loading = true;
     this.productService.getProductById(id).subscribe({
