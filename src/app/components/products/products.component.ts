@@ -18,16 +18,18 @@ export class ProductsComponent implements OnInit, DoCheck {
   allProducts: Product[] = [];
   categories: category[] = [];
   selectedCategory = '';
+  selectedCategoryId: number | null = null;
   isLoading: boolean = true;
   checkMessage: string = '';
 
   //pagination
   currentPage = 1;
-  pageSize = 10;
-  totalPage = 0;
+  pageSize = 9;
   products: Product[] = [];
+  totalProducts: number = 0;
 
   //common list
+  
   product: any[] = [];
 
   columns = [
@@ -39,7 +41,7 @@ export class ProductsComponent implements OnInit, DoCheck {
   ////common button ////
   buttonLabel: string = 'Add product';
 
-  buttonType: 'button' | 'submit' | 'reset'= 'button';
+  buttonType: 'button' | 'submit' | 'reset' = 'button';
 
   buttonDisabled: boolean = false;
 
@@ -49,48 +51,48 @@ export class ProductsComponent implements OnInit, DoCheck {
   productPrice: number | null = null;
 
   openForm(): void {
-  this.showForm = true;
-}
-
-////common Accordion ///
-
-openAccordionIndex: number = -1;
-
-toggleAccordion(index: number): void {
-  if (this.openAccordionIndex === index) {
-    this.openAccordionIndex = -1;
+    this.showForm = true;
   }
-  else {
-    this.openAccordionIndex = index;
+
+  ////common Accordion ///
+
+  openAccordionIndex: number = -1;
+
+  toggleAccordion(index: number): void {
+    if (this.openAccordionIndex === index) {
+      this.openAccordionIndex = -1;
+    } else {
+      this.openAccordionIndex = index;
+    }
   }
-}
 
-Accordion=[
-  {
-    Title:'Terms & Conditions',
-    Content:'An e-commerce terms and conditions (T&C) agreement acts as a legal contract between your online store and your shoppers.It sets rules for site use, outlines pricing and payment terms, defines return policies, and limits your legal liability if things go wrong.'
-  },
-  {
-    Title:'Privacy Policy',
-    Content:'A privacy policy is a legal statement that tells users how a website or app collects, uses, stores, and protects personal data. It builds trust with visitors and meets legal rules set by global data laws.'
-  },
-  {
-    Title:'Shipping Policy',
-    Content:'A shipping policy is a clear guide on an online store. It tells buyers how fast items ship, how much delivery costs, and what delivery areas the business serves. It helps stop confusion and answers buyer questions before they buy.'
+  Accordion = [
+    {
+      Title: 'Terms & Conditions',
+      Content:
+        'An e-commerce terms and conditions (T&C) agreement acts as a legal contract between your online store and your shoppers.It sets rules for site use, outlines pricing and payment terms, defines return policies, and limits your legal liability if things go wrong.',
+    },
+    {
+      Title: 'Privacy Policy',
+      Content:
+        'A privacy policy is a legal statement that tells users how a website or app collects, uses, stores, and protects personal data. It builds trust with visitors and meets legal rules set by global data laws.',
+    },
+    {
+      Title: 'Shipping Policy',
+      Content:
+        'A shipping policy is a clear guide on an online store. It tells buyers how fast items ship, how much delivery costs, and what delivery areas the business serves. It helps stop confusion and answers buyer questions before they buy.',
+    },
+  ];
+
+  ///Date picker////
+  selectedDate: string = '';
+
+  minDate: string = '2026-01-01';
+  maxDate: string = '2026-12-31';
+
+  onDateSelected(date: string): void {
+    this.selectedDate = date;
   }
-  
-];
-
-///Date picker////
-selectedDate: string ='';
-
-minDate: string='2026-01-01';
-maxDate: string='2026-12-31';
-
-onDateSelected(date:string):void{
-  this.selectedDate = date;
-}
-
 
   constructor(
     private productService: ProductService,
@@ -111,17 +113,17 @@ onDateSelected(date:string):void{
   }
 
   ngOnInit(): void {
-    console.log('ProductsComponent initialized');
-    this.loadData();
+    // console.log('ProductsComponent initialized');
+    this.loadProducts();
     this.loadCategories();
 
-    this.productService.getProducts(this.currentPage, this.pageSize).subscribe({
-      next: (response) => {
-        this.product = response;
-      },
-    });
+    // this.productService.getProducts(2, 10).subscribe({
+    //   next: (data) => {
+    //     this.product = data;
+    //   },
+    // });
 
-    this.loadProducts(1);
+    // this.loadProducts();
   }
 
   ngDoCheck(): void {
@@ -130,66 +132,76 @@ onDateSelected(date:string):void{
   }
   ///common button add product
 
-  addProduct(): void{
-    if(!this.productName || this.productPrice === null){
+  addProduct(): void {
+    if (!this.productName || this.productPrice === null) {
       alert('please enter name and price');
       return;
     }
 
-    const product ={
+    const product = {
       name: this.productName,
-      price:this.productPrice
+      price: this.productPrice,
     };
 
     this.product.push(product);
     alert('product add successfully');
 
-    this.productName='';
-    this.productPrice= null;
+    this.productName = '';
+    this.productPrice = null;
     this.showForm = false;
   }
 
   ///dropDown////
-selectedCategorys: any = '';
+  selectedCategorys: any = '';
 
-onCategoryChange(value: any): void {
+  onCategoryChange(value: any): void {
     this.selectedCategorys = value;
   }
 
+   /////////////////////pagination///////////////////////
 
-  loadData(): void {
-    console.log('Loading data...');
-    console.log(this.pageSize);
+  loadProducts(): void {
+    this.isLoading = true;
 
-    // Load products first
-    this.productService.getProducts(this.currentPage, this.pageSize).subscribe({
-      next: (res) => {
-        console.log('Products response:', res);
-        this.products = res;
+    this.productService.getProducts(this.currentPage,this.pageSize,this.selectedCategoryId ?? undefined).subscribe({
+      next: (response) => {
+        console.log('PAGE:', this.currentPage);
+        console.log('PRODUCTS:', response.products.data);
+         console.log('DATA:', response.products.data);
+        console.log('DATA LENGTH:', response.products.data.length);
+        console.log('API Response:', response);
+
+        this.products = response.products.data;
+        // alert('Products loaded: ' + this.products.length);
         this.allProducts = [...this.products];
-        this.extractCategories();
-
-        //   this.currentPage = res.product.current_page;
-
-        // this.lastPage = res.products.last_page;
+        this.totalProducts = response.products.total;
+        this.currentPage = response.products.current_page;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading products:', error);
+        console.error(error);
         this.isLoading = false;
       },
     });
   }
-  //pagination
-  nextPage() {
-    this.currentPage++;
-    this.loadData();
-  }
-  previousPage() {
-    this.currentPage--;
-    this.loadData();
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.loadProducts();
   }
 
+  onCommonCategoryChange(category: any):void{
+    if(category===null){
+      this.selectedCategoryId = null;
+    }
+    else{
+      this.selectedCategoryId = category.id;
+    }
+    this.currentPage =1;
+    this.loadProducts();
+  }
+
+  
   loadCategories(): void {
     this.productService.getCategories().subscribe({
       next: (res) => {
@@ -245,20 +257,6 @@ onCategoryChange(value: any): void {
       },
     });
   }
-/////////////////////pagination///////////////////////
-
-loadProducts(page: number=1):void{
-  this.productService.getProductPage(page).subscribe((response:any)=>{
-    this.product = response.product.data;
-    this.currentPage= response.product.current_page;
-    this.totalPage= response.product.last_page;
-
-  })
-}
-
-
- 
-  
  
 
   addToCart(product: Product): void {

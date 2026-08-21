@@ -14,9 +14,15 @@ export class CommonListComponent {
 
   @Input() categories: any[] = [];
 
-  @Input() totalPage: number =0;
+  @Input() pageSize: number = 9;
+
+  @Input() currentPage: number = 1;
+
+  @Input() totalItems: number = 0;
 
   @Output() pageChange = new EventEmitter<number>();
+
+  @Output() categoryChange = new EventEmitter<any>();
 
 
 headerColor: string = '#f5f6f8';
@@ -26,7 +32,7 @@ rowColor2: string = '#f3f4f6';
   
 
   searchText: string='';
-  selectedCategory: string='';
+  selectedCategory: number| null=null;
 
   //sort
   sortField: string ='';
@@ -48,19 +54,17 @@ rowColor2: string = '#f3f4f6';
   }
 
   selectCategory(category: any):void{
-    this.selectedCategory = category.name;
+    this.selectedCategory = category.id;
     this.categorySearchText= category.name;
     this.showCategoryDropDown= false;
 
+    this.categoryChange.emit(category);
   }
 
-  //pagination
-
-  currentPage: number= 1;
-  pageSize: number= 10;
+  //pagination/////////
 
   get totalPages():number{
-    return Math.ceil(this.filterData.length/ this.pageSize);
+    return Math.ceil(this.totalItems / this.pageSize);
   }
 
   get pages(): number[] {
@@ -68,9 +72,7 @@ rowColor2: string = '#f3f4f6';
 }
 
   get paginatedData(): any[]{
-    const startIndex =(this.currentPage -1)* this.pageSize;
-    const endIndex = startIndex+ this.pageSize;
-    return this.filterData.slice(startIndex,endIndex);
+    return this.filterData;
   }
   
   goToPage(page:number):void{
@@ -92,6 +94,7 @@ rowColor2: string = '#f3f4f6';
 
     if (this.searchText.trim()) {
       const searchValue = this.searchText.toLowerCase().trim();
+      
       result = result.filter(item =>
         this.columns.some(column => {
           const value = this.getValue(item, column.field);
@@ -102,13 +105,13 @@ rowColor2: string = '#f3f4f6';
     }
 
     // Category filter
-    if (this.selectedCategory) {
+    // if (this.selectedCategory) {
 
-      result = result.filter(item => {
-        const categoryName =this.getValue(item, 'category.name');
-        return categoryName === this.selectedCategory;
-      });
-    }
+    //   result = result.filter(item => {
+    //     const categoryName =this.getValue(item, 'category.id');
+    //     return categoryName === this.selectedCategory;
+    //   });
+    // }
     return result;
   }
 

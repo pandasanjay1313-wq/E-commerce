@@ -20,28 +20,34 @@ export class ProductService {
 searchText = signal('');
 
   constructor(private http: HttpClient) {}
-getProducts(page: number, limit: number): Observable<Product[]> {
+  
+getProducts(page: number=1, limit: number=9, categoryId?: number): Observable<any> {
 
-  return this.http.get<any>(this.baseUrl + `/products`)
-    .pipe(
-      map(res => {
-        // console.log('Full Response:', res);
-        // console.log('Products:', res.products.data);
-        return res.products.data;
-      }),
-      catchError(this.handleError)
-    );
-}
-  getProductPage(page: number=1){
-    return this.http.get(`${this.baseUrl}/product?page=${page}`);
+  let url= (`${this.baseUrl}/products?page=${page}&per_page=${limit}`);
+
+  if(categoryId){
+      url += `&category_id=${categoryId}`;
   }
+
+  return this.http.get<any>(url).pipe(catchError(this.handleError));
+
+
+    // .pipe(
+    //   catchError(this.handleError)
+    // );
+
+
+}
+  // getProductPage(page: number=1){
+  //   return this.http.get(`${this.baseUrl}/product?page=${page}`);
+  // }
+
+
+
 
   setSearchText(value: string){
     this.searchText.set(value);
   }
-
-
-
 
   getProductById(slug: any): Observable<any> {
     // console.log("called the get Product by slug");

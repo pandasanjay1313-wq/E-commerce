@@ -213,16 +213,19 @@
       </div>
     </div>
   </div>
-        <div style="text-align: center;">
+        <!-- <div style="text-align: center;">
           <button (click)="previousPage()">Previous<< </button>
           <span>{{ currentPage }}</span>
           <button (click)="nextPage()">Next>></button>
-        </div>
-        <app-common-list [data]="product"
+        </div> -->
+        <app-common-list [data]="products"
                          [columns]="columns"
                          [categories]="categories"
-                         [totalPage]="totalPage"
-                         (pageChange)="loadProducts($event)"
+                         [pageSize]="pageSize"
+                         [totalItems]="totalProducts"
+                         [currentPage]="currentPage"
+                         (pageChange)="onPageChange($event)"
+                         (categoryChange)="onCommonCategoryChange($event)"
                          ></app-common-list>
 
        <app-common-button [label]="'Add product'"

@@ -21,9 +21,10 @@
         *ngIf="showCategoryDropDown">
 
             <div class="category-option"
-            (click)="selectedCategory='';
+            (click)="selectedCategory=null;
             categorySearchText = '';
-            showCategoryDropDown = false">
+            showCategoryDropDown = false;
+            categoryChange.emit(null)">
                 All categories
             </div>
 
