@@ -27,9 +27,9 @@
             categoryChange.emit(null)">
                 All categories
             </div>
-
+            
             <div class="category-option "
-            *ngFor="let category of filtercategories"
+            *ngFor="let category of filtercategories()"
             (click)="selectCategory(category)">
                 <p>{{category.name}}
             </div>

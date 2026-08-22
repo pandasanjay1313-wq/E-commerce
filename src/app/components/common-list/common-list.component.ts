@@ -14,7 +14,7 @@ export class CommonListComponent {
 
   @Input() categories: any[] = [];
 
-  @Input() pageSize: number = 9;
+  @Input() pageSize: number = 10;
 
   @Input() currentPage: number = 1;
 
@@ -45,7 +45,7 @@ rowColor2: string = '#f3f4f6';
   openCategoryDropdown():void{
     this.showCategoryDropDown = true;
   }
-    get filtercategories(): any[]{
+     filtercategories(): any[]{
     const search = this.categorySearchText.toLowerCase().trim();
     if(!search){
       return this.categories;
@@ -54,6 +54,7 @@ rowColor2: string = '#f3f4f6';
   }
 
   selectCategory(category: any):void{
+    // alert('Common List clicked: ' + category.name);
     this.selectedCategory = category.id;
     this.categorySearchText= category.name;
     this.showCategoryDropDown= false;
@@ -104,14 +105,14 @@ rowColor2: string = '#f3f4f6';
       );
     }
 
-    // Category filter
-    // if (this.selectedCategory) {
+    /////Category filter
+    if (this.selectedCategory) {
 
-    //   result = result.filter(item => {
-    //     const categoryName =this.getValue(item, 'category.id');
-    //     return categoryName === this.selectedCategory;
-    //   });
-    // }
+      result = result.filter(item => {
+        const categoryName =this.getValue(item, 'category.id');
+        return categoryName === this.selectedCategory;
+      });
+    }
     return result;
   }
 

@@ -24,7 +24,7 @@ export class ProductsComponent implements OnInit, DoCheck {
 
   //pagination
   currentPage = 1;
-  pageSize = 9;
+  pageSize = 10;
   products: Product[] = [];
   totalProducts: number = 0;
 
@@ -161,19 +161,21 @@ export class ProductsComponent implements OnInit, DoCheck {
    /////////////////////pagination///////////////////////
 
   loadProducts(): void {
+    //  alert('Loading category: ' +(this.selectedCategoryId ?? 'ALL'));
+
     this.isLoading = true;
 
     this.productService.getProducts(this.currentPage,this.pageSize,this.selectedCategoryId ?? undefined).subscribe({
       next: (response) => {
-        console.log('PAGE:', this.currentPage);
-        console.log('PRODUCTS:', response.products.data);
-         console.log('DATA:', response.products.data);
-        console.log('DATA LENGTH:', response.products.data.length);
-        console.log('API Response:', response);
-
+        // console.log('PAGE:', this.currentPage);
+        // console.log('PRODUCTS:', response.products.data);
+        //  console.log('DATA:', response.products.data);
+        // console.log('DATA LENGTH:', response.products.data.length);
+        // console.log('API Response:', response);
+        //  alert('API called');
         this.products = response.products.data;
         // alert('Products loaded: ' + this.products.length);
-        this.allProducts = [...this.products];
+        this.allProducts = response.products.data;
         this.totalProducts = response.products.total;
         this.currentPage = response.products.current_page;
         this.isLoading = false;
@@ -191,13 +193,26 @@ export class ProductsComponent implements OnInit, DoCheck {
   }
 
   onCommonCategoryChange(category: any):void{
-    if(category===null){
-      this.selectedCategoryId = null;
-    }
-    else{
-      this.selectedCategoryId = category.id;
-    }
-    this.currentPage =1;
+    // alert('Category ID: ' + category.id);
+    // alert('Parent received: ' + category.name);
+  
+  this.currentPage = 1;
+   this.pageSize = 10;
+  this.selectedCategoryId = category ? category.id : null;
+
+  // this.productService.getProducts(this.currentPage, this.pageSize, this.selectedCategoryId ?? undefined).subscribe({
+  //   next: (response) => {
+
+  //     this.products = response.products.data;
+  //       this.allProducts = response.products.data;
+  //       this.totalProducts = response.products.total;
+  //       this.currentPage = response.products.current_page;
+  //   },
+
+  //   error: (error) => {
+  //     console.error(error);
+  //   }
+  // });
     this.loadProducts();
   }
 
@@ -209,7 +224,7 @@ export class ProductsComponent implements OnInit, DoCheck {
         this.categories = res.categories;
       },
       error: (err) => {
-        console.log(err);
+      console.log(err);
       },
     });
   }

@@ -21,7 +21,7 @@ searchText = signal('');
 
   constructor(private http: HttpClient) {}
   
-getProducts(page: number=1, limit: number=9, categoryId?: number): Observable<any> {
+getProducts(page: number=1, limit: number=10, categoryId?: number): Observable<any> {
 
   let url= (`${this.baseUrl}/products?page=${page}&per_page=${limit}`);
 
