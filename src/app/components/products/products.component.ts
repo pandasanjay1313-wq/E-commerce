@@ -87,6 +87,8 @@ selectedDate: string ='';
 minDate: string='2026-01-01';
 maxDate: string='2026-12-31';
 
+disableWeekends: boolean = false;
+
 onDateSelected(date:string):void{
   this.selectedDate = date;
 }

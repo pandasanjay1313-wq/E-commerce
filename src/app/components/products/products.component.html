@@ -244,11 +244,12 @@
                              [isOpen]="openAccordionIndex === i"
                              (toggle)="toggleAccordion(i)"></app-common-accordion>
        </div>                     
-       <app-date-picker [label]="'Offer Date'"
+       <app-date-picker 
                         [value]="selectedDate"
                         [minDate]="minDate"
                         [maxDate]="maxDate"
-                        (dateChange)="onDateSelected($event)"></app-date-picker>
+                        [disableWeekends]="disableWeekends"
+                        (valueChange)="selectedDate = $event"></app-date-picker>
        
        <app-common-dropdown [label]="'Category'"
                             [options]="categories"

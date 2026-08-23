@@ -1,4 +1,24 @@
-<div>
+<div class="date-settings">
+    <h3>Date picker Settings</h3>
+    <div class="setting-item">
+        <label>Minimum Date</label>
+        <input type="date" [(ngModel)]="minDate"> 
+    </div>
+    <div class="setting-item">
+        <label>Maximum date</label>
+        <input type="date" [(ngModel)]="maxDate">
+    </div>
+    <div class="setting-item">
+        <label>Disable Weekends</label>
+        <input type="checkbox" [(ngModel)]="disableWeekends">
+    </div>
+</div>
+
+
+
+
+
+<!-- <div>
     <label>{{label}}</label>
 
     <input type="date"
@@ -6,4 +26,4 @@
            [min]="minDate"
            [max]="maxDate"
            (change)="onDateChange($event)">
-</div><br><br>
+</div><br><br> -->
