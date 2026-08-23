@@ -1,0 +1,4 @@
+button::before {
+  content: "+";
+  margin-right: 6px;
+}

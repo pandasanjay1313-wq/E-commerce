@@ -229,9 +229,11 @@
                          ></app-common-list>
 
        <app-common-button [label]="'Add product'"
+                          icon="fas fa-plus"
                          [type]="'button'"
                          [disabled]="false"
                          (clicked)="openForm()"></app-common-button>
+                         
        <div *ngIf="showForm">
         <h3>add Product</h3>
         <input type="text" placeholder="Product Name" [(ngModel)]="productName">
@@ -251,7 +253,7 @@
                         [value]="selectedDate"
                         [minDate]="minDate"
                         [maxDate]="maxDate"
-                        [disableWeekends]="disableWeekends"
+                      
                         (valueChange)="selectedDate = $event"></app-date-picker>
        
        <app-common-dropdown [label]="'Category'"

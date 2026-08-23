@@ -2,4 +2,5 @@
 <button [type]="type" 
         [disabled]="disabled"
         (click)="clickButton()"
-        class="btn btn-primary w-10"> {{label}}</button><br><br>
+        class="btn btn-primary w-10"><i *ngIf="icon" [class]="icon"></i> <span>{{label}} </span>
+</button><br><br>

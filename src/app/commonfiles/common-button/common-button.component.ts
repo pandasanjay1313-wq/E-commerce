@@ -9,6 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class CommonButtonComponent {
 
   @Input() label: string = 'Button';
+  @Input() icon: string = '';
   
   @Input() type:string = 'button';
 
