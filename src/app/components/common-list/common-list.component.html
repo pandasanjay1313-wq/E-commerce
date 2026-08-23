@@ -21,14 +21,15 @@
         *ngIf="showCategoryDropDown">
 
             <div class="category-option"
-            (click)="selectedCategory='';
+            (click)="selectedCategory=null;
             categorySearchText = '';
-            showCategoryDropDown = false">
+            showCategoryDropDown = false;
+            categoryChange.emit(null)">
                 All categories
             </div>
-
+            
             <div class="category-option "
-            *ngFor="let category of filtercategories"
+            *ngFor="let category of filtercategories()"
             (click)="selectCategory(category)">
                 <p>{{category.name}}
             </div>
